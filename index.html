@@ -1,349 +1,456 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>明明專業洗衣 - 線上預約收送系統</title>
-    <!-- 引入 LINE LIFF SDK -->
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <style>
-        :root {
-            --primary-color: #0066cc;
-            --primary-light: #e6f0fa;
-            --text-color: #333333;
-            --bg-color: #f7f9fc;
-            --card-bg: #ffffff;
-            --border-color: #dddddd;
-            --success-color: #28a745;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; padding-bottom: 90px; }
-        .header { background: linear-gradient(135deg, var(--primary-color), #004499); color: white; text-align: center; padding: 25px 15px; }
-        .header h1 { font-size: 22px; margin-bottom: 5px; }
-        .header p { font-size: 13px; opacity: 0.9; }
-        .notice-bar { background-color: #fff3cd; color: #856404; padding: 10px; font-size: 13px; text-align: center; font-weight: bold; }
-        .container { max-width: 600px; margin: 15px auto; padding: 0 15px; }
-        .section-card { background-color: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .section-title { font-size: 16px; color: var(--primary-color); margin-bottom: 12px; border-left: 4px solid var(--primary-color); padding-left: 8px; font-weight: bold; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; }
-        
-        /* 橫向滾動分類頁籤 */
-        .category-tab-container { display: flex; overflow-x: auto; gap: 8px; margin-bottom: 15px; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
-        .category-tab { background-color: #eeeeee; padding: 8px 16px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; border: none; font-weight: bold; color: #333; transition: all 0.2s; }
-        .category-tab.active { background-color: var(--primary-color); color: white; }
-        
-        .category-content { display: none; }
-        .category-content.active { display: block; }
-        
-        .price-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f2f2f2; }
-        .item-info { flex: 1; padding-right: 10px; }
-        .item-name { font-weight: bold; font-size: 14px; color: #222; }
-        .item-price { font-size: 12px; color: #666; margin-top: 2px; }
-        .quantity-control { display: flex; align-items: center; gap: 12px; }
-        .btn-qty { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--primary-color); background-color: white; color: var(--primary-color); font-size: 18px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-        .qty-val { font-weight: bold; min-width: 24px; text-align: center; display: inline-block; font-size: 15px; }
-        
-        /* 底部結帳欄 */
-        .summary-bar { position: fixed; bottom: 0; left: 0; right: 0; background-color: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto; z-index: 100; }
-        .total-price { font-size: 18px; font-weight: bold; color: #e4393c; }
-        .shipping-note { font-size: 11px; color: #666; }
-        .btn-submit { background-color: var(--success-color); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
-        .btn-submit:disabled { background-color: #cccccc; cursor: not-allowed; }
-        
-        /* 彈窗 */
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background-color: white; border-radius: 12px; padding: 22px; max-width: 450px; width: 100%; max-height: 80vh; overflow-y: auto; }
-        .order-summary-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
-        .order-summary-table th, .order-summary-table td { padding: 8px 6px; border-bottom: 1px solid #eee; text-align: left; }
-        .btn-group-modal { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-modal { flex: 1; padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .btn-cancel { background-color: #eee; color: #333; }
-        .btn-confirm { background-color: var(--primary-color); color: white; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>明明專業洗衣 - 線上收送預約系統</title>
+  <style>
+    :root {
+      --primary-color: #0056b3;
+      --secondary-color: #e6f0fa;
+      --accent-color: #d9534f;
+      --text-color: #333;
+      --bg-color: #f8f9fa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding-bottom: 40px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 20px 0;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .notice-bar {
+      background-color: var(--secondary-color);
+      padding: 10px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      border-bottom: 1px solid #cce0f5;
+    }
+
+    .section {
+      background: white;
+      padding: 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 5px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .item-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .item-title {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .item-price {
+      font-size: 0.85rem;
+      color: #666;
+      margin: 4px 0;
+    }
+
+    .quantity-control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .btn-qty {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background-color: var(--secondary-color);
+      color: var(--primary-color);
+      font-weight: bold;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .summary-card {
+      background: #f1f7fe;
+      border: 1px dashed var(--primary-color);
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      border-top: 1px solid #ccc;
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+      background-color: #004085;
+    }
+
+    .btn-submit:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>明明專業洗衣</h1>
-        <p>專業、舒適、放心的到府收送線上預約服務</p>
+<div class="container">
+  <div class="header">
+    <h1>明明專業洗衣</h1>
+    <p style="font-size: 0.9rem; margin-top: 5px;">線上預約專車收送服務</p>
+  </div>
+
+  <div class="notice-bar">
+    🚚 消費滿 NT$ 400 免收運費（未達門檻另收 NT$ 100 運費）
+  </div>
+
+  <form id="bookingForm" onsubmit="event.preventDefault(); submitBooking();">
+    <!-- 聯絡資訊 -->
+    <div class="section">
+      <div class="section-title">1. 客戶聯絡資訊</div>
+      <div class="form-group">
+        <label for="name">姓名 *</label>
+        <input type="text" id="name" required placeholder="請輸入姓名">
+      </div>
+      <div class="form-group">
+        <label for="phone">電話 *</label>
+        <input type="tel" id="phone" required placeholder="例：0912345678">
+      </div>
+      <div class="form-group">
+        <label for="address">收送地址 *</label>
+        <input type="text" id="address" required placeholder="請輸入完整門牌地址">
+      </div>
     </div>
 
-    <div class="notice-bar">
-        🚚 滿 NT$400 免運費，未滿酌收 NT$100。
-    </div>
-
-    <div class="container">
-        <form id="laundryForm" onsubmit="return false;">
-            <!-- 收送資訊卡片 -->
-            <div class="section-card">
-                <div class="section-title">👤 收送資訊</div>
-                <div class="form-group"><label>姓名 *</label><input type="text" id="username" class="form-control" required placeholder="請輸入姓名"></div>
-                <div class="form-group"><label>聯絡電話 *</label><input type="tel" id="phone" class="form-control" required placeholder="請輸入手機號碼"></div>
-                <div class="form-group"><label>收送地址 *</label><input type="text" id="address" class="form-control" required placeholder="請輸入完整的地址"></div>
-                <div class="form-group">
-                    <label>預期取件時段 *</label>
-                    <select id="pickup_time" class="form-control" required>
-                        <option value="">請選擇取件時段...</option>
-                        <option value="每週一至週六 11:00 ～ 13:00">每週一至週六 11:00 ～ 13:00</option>
-                        <option value="每週一至週六 13:00 ～ 15:00">每週一至週六 13:00 ～ 15:00</option>
-                        <option value="每週一至週六 15:00 ～ 17:00">每週一至週六 15:00 ～ 17:00</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- 選擇送洗品項卡片 -->
-            <div class="section-card">
-                <div class="section-title">🧺 選擇送洗品項</div>
-                
-                <!-- 橫向滾動分類標籤 -->
-                <div class="category-tab-container">
-                    <button type="button" class="category-tab active" onclick="switchTab(0)">一般衣服類</button>
-                    <button type="button" class="category-tab" onclick="switchTab(1)">裙褲類</button>
-                    <button type="button" class="category-tab" onclick="switchTab(2)">機能性品項類</button>
-                    <button type="button" class="category-tab" onclick="switchTab(3)">禮服類</button>
-                </div>
-
-                <div class="item-list">
-                    <!-- 0. 一般衣服類 -->
-                    <div id="panel-tab0" class="category-content active">
-                        <div class="price-item"><div class="item-info"><div class="item-name">西裝</div><div class="item-price">NT$ 150</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('西裝', 150, -1)">-</button><span class="qty-val" id="qty_西裝">0</span><button type="button" class="btn-qty" onclick="changeQty('西裝', 150, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">襯衫</div><div class="item-price">NT$ 60</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('襯衫', 60, -1)">-</button><span class="qty-val" id="qty_襯衫">0</span><button type="button" class="btn-qty" onclick="changeQty('襯衫', 60, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">T SHIRT</div><div class="item-price">NT$ 80</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('T SHIRT', 80, -1)">-</button><span class="qty-val" id="qty_T SHIRT">0</span><button type="button" class="btn-qty" onclick="changeQty('T SHIRT', 80, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">POLO衫</div><div class="item-price">NT$ 100</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('POLO衫', 100, -1)">-</button><span class="qty-val" id="qty_POLO衫">0</span><button type="button" class="btn-qty" onclick="changeQty('POLO衫', 100, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">外套/夾克</div><div class="item-price">NT$ 180</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('外套/夾克', 180, -1)">-</button><span class="qty-val" id="qty_外套/夾克">0</span><button type="button" class="btn-qty" onclick="changeQty('外套/夾克', 180, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">羽絨衣</div><div class="item-price">NT$ 300</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('羽絨衣', 300, -1)">-</button><span class="qty-val" id="qty_羽絨衣">0</span><button type="button" class="btn-qty" onclick="changeQty('羽絨衣', 300, 1)">+</button></div></div>
-                    </div>
-
-                    <!-- 1. 裙褲類 -->
-                    <div id="panel-tab1" class="category-content">
-                        <div class="price-item"><div class="item-info"><div class="item-name">西褲</div><div class="item-price">NT$ 100</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('西褲', 100, -1)">-</button><span class="qty-val" id="qty_西褲">0</span><button type="button" class="btn-qty" onclick="changeQty('西褲', 100, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">牛仔褲</div><div class="item-price">NT$ 150</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('牛仔褲', 150, -1)">-</button><span class="qty-val" id="qty_牛仔褲">0</span><button type="button" class="btn-qty" onclick="changeQty('牛仔褲', 150, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">短裙</div><div class="item-price">NT$ 80</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('短裙', 80, -1)">-</button><span class="qty-val" id="qty_短裙">0</span><button type="button" class="btn-qty" onclick="changeQty('短裙', 80, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">長裙</div><div class="item-price">NT$ 150</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('長裙', 150, -1)">-</button><span class="qty-val" id="qty_長裙">0</span><button type="button" class="btn-qty" onclick="changeQty('長裙', 150, 1)">+</button></div></div>
-                    </div>
-
-                    <!-- 2. 機能性品項類 -->
-                    <div id="panel-tab2" class="category-content">
-                        <div class="price-item"><div class="item-info"><div class="item-name">GORE-TEX 衣服</div><div class="item-price">NT$ 400</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('GORE-TEX 衣服', 400, -1)">-</button><span class="qty-val" id="qty_GORE-TEX 衣服">0</span><button type="button" class="btn-qty" onclick="changeQty('GORE-TEX 衣服', 400, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">雪衣</div><div class="item-price">NT$ 600</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('雪衣', 600, -1)">-</button><span class="qty-val" id="qty_雪衣">0</span><button type="button" class="btn-qty" onclick="changeQty('雪衣', 600, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">雪褲</div><div class="item-price">NT$ 600</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('雪褲', 600, -1)">-</button><span class="qty-val" id="qty_雪褲">0</span><button type="button" class="btn-qty" onclick="changeQty('雪褲', 600, 1)">+</button></div></div>
-                    </div>
-
-                    <!-- 3. 禮服類 -->
-                    <div id="panel-tab3" class="category-content">
-                        <div class="price-item"><div class="item-info"><div class="item-name">短禮服</div><div class="item-price">NT$ 400</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('短禮服', 400, -1)">-</button><span class="qty-val" id="qty_短禮服">0</span><button type="button" class="btn-qty" onclick="changeQty('短禮服', 400, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">長禮服</div><div class="item-price">NT$ 700</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('長禮服', 700, -1)">-</button><span class="qty-val" id="qty_長禮服">0</span><button type="button" class="btn-qty" onclick="changeQty('長禮服', 700, 1)">+</button></div></div>
-                        <div class="price-item"><div class="item-info"><div class="item-name">新娘禮服</div><div class="item-price">NT$ 1500</div></div><div class="quantity-control"><button type="button" class="btn-qty" onclick="changeQty('新娘禮服', 1500, -1)">-</button><span class="qty-val" id="qty_新娘禮服">0</span><button type="button" class="btn-qty" onclick="changeQty('新娘禮服', 1500, 1)">+</button></div></div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <!-- 底部固定結帳欄 -->
-    <div class="summary-bar">
-        <div>
-            <div>小計: <span id="subtotalPrice" class="total-price">NT$ 0</span></div>
-            <div class="shipping-note" id="shippingNote">運費: NT$ 100 (還差 NT$ 400 免運)</div>
+    <!-- 洗滌品項選擇 -->
+    <div class="section">
+      <div class="section-title">2. 選擇洗滌品項（預估）</div>
+      <div class="item-grid">
+        <div class="item-card">
+          <div class="item-title">日常上衣/襯衫</div>
+          <div class="item-price">NT$ 80 元起</div>
+          <div class="quantity-control">
+            <button type="button" class="btn-qty" onclick="changeQty('top', -1)">-</button>
+            <span id="qty-top">0</span>
+            <button type="button" class="btn-qty" onclick="changeQty('top', 1)">+</button>
+          </div>
         </div>
-        <button type="button" class="btn-submit" id="btnOpenModal" onclick="openConfirmModal()">預覽並送出</button>
-    </div>
 
-    <!-- 訂單確認彈窗 -->
-    <div class="modal" id="confirmModal">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 10px; color: var(--primary-color);">📋 請確認您的預約明細</h3>
-            <div id="modalCustomerInfo" style="font-size: 13px; line-height: 1.8; background: #f9f9f9; padding: 10px; border-radius: 6px;"></div>
-            
-            <table class="order-summary-table">
-                <thead>
-                    <tr><th>品項</th><th>數量</th><th>小計</th></tr>
-                </thead>
-                <tbody id="modalItemsTable"></tbody>
-            </table>
-            
-            <div style="margin-top: 15px; text-align: right; font-weight: bold;">
-                <div>運費：<span id="modalShippingFee">NT$ 0</span></div>
-                <div style="font-size: 16px; color: #e4393c; margin-top: 5px;">總計金額：<span id="modalGrandTotal">NT$ 0</span></div>
-            </div>
-
-            <div class="btn-group-modal">
-                <button type="button" class="btn-modal btn-cancel" onclick="closeModal()">返回修改</button>
-                <button type="button" class="btn-modal btn-confirm" id="btnSubmitOrder" onclick="submitBooking()">確認送出預約</button>
-            </div>
+        <div class="item-card">
+          <div class="item-title">褲款/裙款</div>
+          <div class="item-price">NT$ 100 元起</div>
+          <div class="quantity-control">
+            <button type="button" class="btn-qty" onclick="changeQty('bottom', -1)">-</button>
+            <span id="qty-bottom">0</span>
+            <button type="button" class="btn-qty" onclick="changeQty('bottom', 1)">+</button>
+          </div>
         </div>
+
+        <div class="item-card">
+          <div class="item-title">外套/西裝</div>
+          <div class="item-price">NT$ 200 元起</div>
+          <div class="quantity-control">
+            <button type="button" class="btn-qty" onclick="changeQty('jacket', -1)">-</button>
+            <span id="qty-jacket">0</span>
+            <button type="button" class="btn-qty" onclick="changeQty('jacket', 1)">+</button>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-title">雪衣/滑雪服</div>
+          <div class="item-price">NT$ 350 元起</div>
+          <div class="quantity-control">
+            <button type="button" class="btn-qty" onclick="changeQty('ski', -1)">-</button>
+            <span id="qty-ski">0</span>
+            <button type="button" class="btn-qty" onclick="changeQty('ski', 1)">+</button>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-title">羽絨外套</div>
+          <div class="item-price">NT$ 300 元起</div>
+          <div class="quantity-control">
+            <button type="button" class="btn-qty" onclick="changeQty('down', -1)">-</button>
+            <span id="qty-down">0</span>
+            <button type="button" class="btn-qty" onclick="changeQty('down', 1)">+</button>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-title">床單/被套</div>
+          <div class="item-price">NT$ 250 元起</div>
+          <div class="quantity-control">
+            <button type="button" class="btn-qty" onclick="changeQty('bedding', -1)">-</button>
+            <span id="qty-bedding">0</span>
+            <button type="button" class="btn-qty" onclick="changeQty('bedding', 1)">+</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // ⚠️ 請將下方替換為您在 Apps Script 部署取得的 Web App 網址 ⚠️
-        const GAS_WEB_APP_URL = https://script.google.com/macros/s/AKfycbwQq9RJUG6w-9E0JhLLe8S_Opt2msTlzLc3w9fjDIZ1WAav9POiLDVOPMRzdRsTO6IcHA/exec"; 
-        // ⚠️ 請將下方替換為您的 LIFF ID ⚠️
-        const MY_LIFF_ID = "2011400784-69V5deMW"; 
+    <!-- 預約時間與備註 -->
+    <div class="section">
+      <div class="section-title">3. 預約收送時間與備註</div>
+      <div class="form-group">
+        <label for="pickupDate">希望收件日期 *</label>
+        <input type="date" id="pickupDate" required>
+      </div>
+      <div class="form-group">
+        <label for="pickupTime">希望收件時段 *</label>
+        <select id="pickupTime" required>
+          <option value="">請選擇時段</option>
+          <option value="上午 (09:00 - 12:00)">上午 (09:00 - 12:00)</option>
+          <option value="下午 (14:00 - 17:00)">下午 (14:00 - 17:00)</option>
+          <option value="晚上 (18:00 - 21:00)">晚上 (18:00 - 21:00)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="note">特殊需求備註</label>
+        <textarea id="note" rows="3" placeholder="例如：衣服有特殊污漬需要重點處理、放置管理室等..."></textarea>
+      </div>
 
-        let cart = {};
-        let subtotal = 0;
-        let lineUserId = "";
+      <!-- 費用小計卡片 -->
+      <div class="summary-card">
+        <div class="summary-row">
+          <span>洗衣小計 (預估)：</span>
+          <span>NT$ <span id="subtotal">0</span></span>
+        </div>
+        <div class="summary-row">
+          <span>專車運費：</span>
+          <span>NT$ <span id="shipping">0</span></span>
+        </div>
+        <div class="summary-total">
+          <span>預估總計：</span>
+          <span>NT$ <span id="total">0</span></span>
+        </div>
+      </div>
 
-        // 初始化 LIFF
-        document.addEventListener("DOMContentLoaded", function() {
-            if (MY_LIFF_ID && MY_LIFF_ID !== "YOUR_LIFF_ID") {
-                liff.init({ liffId: MY_LIFF_ID }).then(() => {
-                    if (liff.isLoggedIn()) {
-                        liff.getProfile().then(profile => {
-                            lineUserId = profile.userId;
-                            if (profile.displayName) {
-                                document.getElementById('username').value = profile.displayName;
-                            }
-                        });
-                    }
-                }).catch(err => console.error("LIFF Init Error:", err));
-            }
-        });
+      <button type="submit" id="submitBtn" class="btn-submit">確認預約並發送 LINE 訊息</button>
+    </div>
+  </form>
+</div>
 
-        // 分類頁籤切換
-        function switchTab(index) {
-            const tabs = document.querySelectorAll('.category-tab');
-            const panels = document.querySelectorAll('.category-content');
-            tabs.forEach((tab, i) => {
-                tab.classList.toggle('active', i === index);
-                panels[i].classList.toggle('active', i === index);
-            });
-        }
+<script>
+  // 【設定項目 1】請貼上第二步產生的 Google Apps Script Web App URL
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyY926n19SQhtRAzdTip5unK7ZnsHMA0TG-AJfqgA8dEAFwjadltzhnhmmRYYk2XdehPA/exec";
 
-        // 修改數量
-        function changeQty(name, price, delta) {
-            if (!cart[name]) {
-                cart[name] = { price: price, qty: 0 };
-            }
-            cart[name].qty += delta;
-            if (cart[name].qty <= 0) {
-                delete cart[name];
-            }
-            
-            // 更新 UI 數量顯示
-            const qtyElem = document.getElementById(`qty_${name}`);
-            if (qtyElem) {
-                qtyElem.innerText = cart[name] ? cart[name].qty : 0;
-            }
-            
-            calculateTotal();
-        }
+  // 【設定項目 2】請填寫你店家的 LINE 官方帳號 ID（例如：@123abcd）或 個人 LINE 連結
+  const LINE_OFFICIAL_ID = "2011400784-69V5deMW"; 
 
-        // 計算總額與運費
-        function calculateTotal() {
-            subtotal = 0;
-            for (let key in cart) {
-                subtotal += cart[key].price * cart[key].qty;
-            }
-            
-            document.getElementById('subtotalPrice').innerText = `NT$ ${subtotal}`;
-            const shippingNote = document.getElementById('shippingNote');
-            
-            if (subtotal === 0) {
-                shippingNote.innerText = "滿 NT$400 免運費，未滿酌收 NT$100。";
-            } else if (subtotal >= 400) {
-                shippingNote.innerText = "🎉 已達免運門檻！";
-            } else {
-                const diff = 400 - subtotal;
-                shippingNote.innerText = `運費: NT$ 100 (還差 NT$ ${diff} 免運)`;
-            }
-        }
+  const itemNames = {
+    top: "日常上衣/襯衫",
+    bottom: "褲款/裙款",
+    jacket: "外套/西裝",
+    ski: "雪衣/滑雪服",
+    down: "羽絨外套",
+    bedding: "床單/被套"
+  };
 
-        // 開啟確認視窗
-        function openConfirmModal() {
-            const name = document.getElementById('username').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim();
-            const pickupTime = document.getElementById('pickup_time').value;
+  const prices = {
+    top: 80,
+    bottom: 100,
+    jacket: 200,
+    ski: 350,
+    down: 300,
+    bedding: 250
+  };
 
-            if (!name || !phone || !address || !pickupTime) {
-                alert("請完整填寫收送資訊（姓名、電話、地址與取件時段）！");
-                return;
-            }
+  const quantities = {
+    top: 0,
+    bottom: 0,
+    jacket: 0,
+    ski: 0,
+    down: 0,
+    bedding: 0
+  };
 
-            if (Object.keys(cart).length === 0) {
-                alert("請至少選擇一項送洗品項！");
-                return;
-            }
+  // 限制日期不能選擇今天以前
+  document.getElementById('pickupDate').min = new Date().toISOString().split('T')[0];
 
-            // 帶入 Modal 資料
-            document.getElementById('modalCustomerInfo').innerHTML = `
-                <b>姓名：</b>${name}<br>
-                <b>電話：</b>${phone}<br>
-                <b>地址：</b>${address}<br>
-                <b>取件時段：</b>${pickupTime}
-            `;
+  function changeQty(item, delta) {
+    if (quantities[item] + delta >= 0) {
+      quantities[item] += delta;
+      document.getElementById(`qty-${item}`).innerText = quantities[item];
+      calculateAll();
+    }
+  }
 
-            let itemsHtml = "";
-            for (let item in cart) {
-                const itemTotal = cart[item].price * cart[item].qty;
-                itemsHtml += `<tr><td>${item}</td><td>${cart[item].qty}</td><td>NT$ ${itemTotal}</td></tr>`;
-            }
-            document.getElementById('modalItemsTable').innerHTML = itemsHtml;
+  function calculateAll() {
+    let subtotal = 0;
+    for (const key in quantities) {
+      subtotal += quantities[key] * prices[key];
+    }
 
-            const shippingFee = subtotal >= 400 ? 0 : 100;
-            const grandTotal = subtotal + shippingFee;
+    let shipping = (subtotal > 0 && subtotal < 400) ? 100 : 0;
+    const total = subtotal + shipping;
 
-            document.getElementById('modalShippingFee').innerText = `NT$ ${shippingFee}`;
-            document.getElementById('modalGrandTotal').innerText = `NT$ ${grandTotal}`;
+    document.getElementById('subtotal').innerText = subtotal;
+    document.getElementById('shipping').innerText = shipping;
+    document.getElementById('total').innerText = total;
+  }
 
-            document.getElementById('confirmModal').style.display = "flex";
-        }
+  function submitBooking() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = "預約處理中...";
 
-        function closeModal() {
-            document.getElementById('confirmModal').style.display = "none";
-        }
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const date = document.getElementById('pickupDate').value;
+    const time = document.getElementById('pickupTime').value;
+    const note = document.getElementById('note').value || "無";
+    const subtotal = document.getElementById('subtotal').innerText;
+    const shipping = document.getElementById('shipping').innerText;
+    const total = document.getElementById('total').innerText;
 
-        // 提交預約至 Google Apps Script
-        function submitBooking() {
-            const btnSubmit = document.getElementById('btnSubmitOrder');
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "傳送中...";
+    // 整理品項清單
+    let itemsText = [];
+    for (const key in quantities) {
+      if (quantities[key] > 0) {
+        itemsText.push(`${itemNames[key]} x ${quantities[key]}`);
+      }
+    }
+    const itemsString = itemsText.length > 0 ? itemsText.join(", ") : "未選擇預估品項";
 
-            const shippingFee = subtotal >= 400 ? 0 : 100;
-            const grandTotal = subtotal + shippingFee;
+    const formData = {
+      name: name,
+      phone: phone,
+      address: address,
+      pickupDate: date,
+      pickupTime: time,
+      items: itemsString,
+      subtotal: subtotal,
+      shipping: shipping,
+      total: total,
+      note: note
+    };
 
-            // 格式化品項字串 (例如："西裝 x 1, 襯衫 x 2")
-            let itemsDetailArr = [];
-            for (let item in cart) {
-                itemsDetailArr.push(`${item} x ${cart[item].qty}`);
-            }
+    // 1. 將資料非同步寫入 Google 試算表 (方案 B)
+    if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("你的SCRIPT_ID")) {
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      }).catch(err => console.error("Google Sheet error:", err));
+    }
 
-            const payload = {
-                userId: lineUserId,
-                username: document.getElementById('username').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                address: document.getElementById('address').value.trim(),
-                pickupTime: document.getElementById('pickup_time').value,
-                itemsDetail: itemsDetailArr.join(', '),
-                subtotal: subtotal,
-                shippingFee: shippingFee,
-                grandTotal: grandTotal
-            };
+    // 2. 組成 LINE 文字訊息並開啟 LINE (方案 A)
+    const lineMessage = `【明明專業洗衣 - 預約收送】\n` +
+      `-------------------------\n` +
+      `👤 姓名：${name}\n` +
+      `📞 電話：${phone}\n` +
+      `📍 地址：${address}\n` +
+      `📅 時間：${date} ${time}\n` +
+      `👕 品項：${itemsString}\n` +
+      `💵 預估金額：NT$ ${total} (運費 $${shipping})\n` +
+      `📝 備註：${note}\n` +
+      `-------------------------\n` +
+      `已送出預約，請店家確認收件時間！`;
 
-            fetch(GAS_WEB_APP_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                alert("🎉 預約成功！我們將會派員前往取件。");
-                if (typeof liff !== "undefined" && liff.isInClient()) {
-                    liff.closeWindow(); // 若在 LINE 內開啟，送出後自動關閉網頁
-                } else {
-                    location.reload();
-                }
-            })
-            .catch(err => {
-                alert("預約傳送失敗，請稍後再試或直接私訊客服。");
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "確認送出預約";
-                console.error("Submit Error:", err);
-            });
-        }
-    </script>
+    const encodedMsg = encodeURIComponent(lineMessage);
+    const lineUrl = `https://line.me/R/oaMessage/${LINE_OFFICIAL_ID}/?${encodedMsg}`;
+
+    alert("預約成功！按「確定」將會自動跳轉至 LINE，請直接點擊「發送」將訊息傳給店家！");
+    
+    // 開啟 LINE 聊天室
+    window.location.href = lineUrl;
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerText = "確認預約並發送 LINE 訊息";
+    }, 3000);
+  }
+</script>
+
 </body>
 </html>
