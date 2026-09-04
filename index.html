@@ -338,7 +338,7 @@ html, body {
     }
   }
 
-  function submitForm() {
+ function submitForm() {
     var name = document.getElementById('username').value.trim();
     var phone = document.getElementById('phone').value.trim();
     var address = document.getElementById('address').value.trim();
@@ -385,7 +385,7 @@ html, body {
       items: selectedList.length > 0 ? selectedList.join(', ') : '自訂備註需求'
     };
 
-    var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDaCzvqhJRGDxGqGuJPjK3tZyf9RGmal3kri2akeZ1C0pA0yLEOG7sZbAzC6Qwakc0Eg/exec";
+    var GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL";
 
     // 同步寫入 Google 試算表
     fetch(GOOGLE_SCRIPT_URL, {
@@ -409,10 +409,13 @@ html, body {
         "------------------\n" +
         "預約已送出，請等待店家專人確認！";
 
-      var LINE_ID = "@654mkark";
-      var lineUrl = "https://line.me/R/oaMessage/" + LINE_ID + "/?" + encodeURIComponent(lineMsg);
+      // 僅顯示「預約成功」
+      alert("預約成功");
 
-      alert("預約成功！資料已成功同步寫入試算表。按下「確定」跳轉至 LINE 發送訊息。");
+      // 正確的 LINE 官方帳號訊息跳轉連結 (請確定 LINE ID 為 @654mkark)
+      var LINE_ID = "@654mkark"; 
+      var lineUrl = "https://line.me/R/oaMessage/" + encodeURIComponent(LINE_ID) + "/?" + encodeURIComponent(lineMsg);
+
       window.location.href = lineUrl;
     }).catch(function(err) {
       alert("傳送失敗，請稍後再試。");
@@ -420,7 +423,5 @@ html, body {
       submitBtn.innerText = '送出預約並開啟 LINE';
     });
   }
-</script>
-
 </body>
 </html>
