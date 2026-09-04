@@ -625,28 +625,53 @@
       }
 
       let itemsArray = [];
-      for (let itemName in selectedCart) {
-        itemsArray.push(`${itemName} x${selectedCart[itemName]}`);
-      }
-      const itemsText = itemsArray.join("、");
-      const totalText = document.getElementById("displayTotal").innerText;
+      let calculatedSubtotal = 0;
 
-      // 發送資料至 Google Apps Script 試算表備份
+      for (let itemName in selectedCart) {
+        const qty = selectedCart[itemName];
+        itemsArray.push(`${itemName} x${qty}`);
+
+        // 計算小計金額
+        for (let cat in laundryData) {
+          const found = laundryData[cat].find(i => i.name === itemName);
+          if (found && typeof found.price === "number") {
+            calculatedSubtotal += found.price * qty;
+            break;
+          }
+        }
+      }
+
+      const itemsText = itemsArray.join("、");
+      const subtotalText = `NT$${calculatedSubtotal}`;
+      const shippingFeeVal = (calculatedSubtotal >= 400 || calculatedSubtotal === 0) ? 0 : 100;
+      const shippingFeeText = `NT$${shippingFeeVal}`;
+      const totalPriceVal = calculatedSubtotal + shippingFeeVal;
+      const totalPriceText = `NT$${totalPriceVal}`;
+
+      // 確實對應 A ~ K 欄位的 JSON 結構發送給 Google Apps Script
       if (scriptURL) {
         fetch(scriptURL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name, phone, address, pickupDate: date, pickupTime: time,
-            items: itemsText, totalPrice: totalText, note,
-            timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
+            timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+            name: name,
+            phone: phone,
+            address: address,
+            pickupDate: date,
+            pickupTime: time,
+            items: itemsText,
+            subtotal: subtotalText,
+            shippingFee: shippingFeeText,
+            totalPrice: totalPriceText,
+            note: note
           })
         });
       }
 
-      // 組合傳送訊息內容
-      const lineMessage = `------------------\n👤 姓名：${name}\n📞 電話：${phone}\n📍 地址：${address}\n📅 時間：${date} ${time}\n👕 品項：${itemsText}\n💵 預估金額：${totalText}\n📝 備註：${note || '無'}\n------------------\n已送出預約，請店家確認收件時間！`;
+      // 組合 LINE 訊息內容
+      const lineMessage = `------------------\n👤 姓名：${name}\n📞 電話：${phone}\n📍 地址：${address}\n📅 時間：${date} ${time}\n👕 品項：${itemsText}\n💵 預估金額：${totalPriceText}\n📝 備註：${note || '無'}\n------------------\n已送出預約，請店家確認收件時間！`;
 
       // 利用 LIFF 在 LINE 聊天室自動代發訊息
       if (liff.isInClient()) {
@@ -656,7 +681,6 @@
             text: lineMessage
           }
         ]).then(() => {
-          // 自動發送成功後，直接關閉 LIFF 網頁視窗
           liff.closeWindow();
         }).catch((err) => {
           console.error("發送失敗:", err);
