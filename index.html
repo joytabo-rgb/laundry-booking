@@ -8,37 +8,44 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; padding: 20px 15px; margin: 0; color: #333; }
     .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow: hidden; }
     
-    /* 1. 藍色滿版 Header 樣式 (符合附件圖片樣式) */
+    /* 藍色滿版 Header */
     .header-banner { background: #0b57d0; color: white; text-align: center; padding: 25px 20px 20px; }
     .header-banner h1 { margin: 0 0 8px; font-size: 1.8rem; font-weight: bold; letter-spacing: 1px; }
     .header-banner p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
     
     .content-body { padding: 20px 25px 25px; }
-    
     .free-shipping-tag { background: #e8f0fe; color: #0b57d0; text-align: center; padding: 10px; border-radius: 8px; font-size: 0.88rem; font-weight: bold; margin-bottom: 25px; }
 
-    .section-title { font-size: 1.1rem; font-weight: bold; margin: 20px 0 12px; color: #0b57d0; display: flex; align-items: center; gap: 6px; }
+    .section-title { font-size: 1.1rem; font-weight: bold; margin: 20px 0 12px; color: #0b57d0; }
     .section-title:first-of-type { margin-top: 0; }
     
-    /* 表單元件樣式 */
     .form-group { margin-bottom: 15px; }
     label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 0.9rem; color: #444; }
     input, select, textarea { width: 100%; padding: 11px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; }
     
-    /* 分類分頁 (Tab) 橫向滾動修正 */
+    /* 分類選單外層 */
+    .category-scroll-wrapper {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
     .category-tabs { 
       display: flex; 
       gap: 8px; 
       overflow-x: auto; 
       white-space: nowrap; 
-      padding-bottom: 8px; 
-      margin-bottom: 15px; 
+      padding: 5px 5px 12px 5px; 
       -webkit-overflow-scrolling: touch; 
-      width: 100%;
-      box-sizing: border-box;
+      cursor: grab;
+      user-select: none;
     }
-    .category-tabs::-webkit-scrollbar { height: 4px; }
-    .category-tabs::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+    
+    .category-tabs:active { cursor: grabbing; }
+
+    /* 自訂清晰滾動條 */
+    .category-tabs::-webkit-scrollbar { height: 6px; }
+    .category-tabs::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+    .category-tabs::-webkit-scrollbar-thumb { background: #0b57d0; border-radius: 10px; }
 
     .tab-btn { 
       background: #f0f4f9; 
@@ -50,34 +57,33 @@
       font-weight: 500; 
       white-space: nowrap; 
       cursor: pointer; 
-      transition: all 0.2s; 
       flex-shrink: 0; 
-      display: inline-block;
+      transition: all 0.2s ease;
     }
     .tab-btn.active { background: #0b57d0; color: white; font-weight: bold; }
 
-    .item-list { min-height: 220px; max-height: 350px; overflow-y: auto; padding-right: 5px; }
+    .item-list { min-height: 200px; max-height: 350px; overflow-y: auto; padding-right: 5px; }
     .item-card { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
     .item-info .title { font-weight: 600; font-size: 0.98rem; color: #222; }
     .item-info .price { color: #666; font-size: 0.85rem; margin-top: 3px; }
     
     .qty-control { display: flex; align-items: center; gap: 12px; }
-    .btn-qty { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #0b57d0; background: white; color: #0b57d0; font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; }
+    .btn-qty { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #0b57d0; background: white; color: #0b57d0; font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .btn-qty:active { background: #0b57d0; color: white; }
     .qty-val { font-weight: bold; font-size: 1.05rem; min-width: 20px; text-align: center; }
 
-    /* 金額計算試算區 */
     .summary-card { background: #f8f9fa; border-radius: 10px; padding: 15px; margin: 15px 0 20px; border: 1px solid #e9ecef; }
     .summary-line { display: flex; justify-content: space-between; font-size: 0.9rem; color: #555; margin-bottom: 6px; }
     .summary-line.total { font-size: 1.1rem; font-weight: bold; color: #0b57d0; margin-top: 8px; border-top: 1px dashed #ccc; padding-top: 8px; }
 
-    .btn-submit { width: 100%; background: #0b57d0; color: white; padding: 15px; font-size: 1.1rem; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-submit { width: 100%; background: #0b57d0; color: white; padding: 15px; font-size: 1.1rem; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background 0.3s; }
+    .btn-submit:disabled { background: #a0c0f0; cursor: not-allowed; }
   </style>
 </head>
 <body>
 
 <div class="container">
+  <!-- 藍色滿版 Header -->
   <div class="header-banner">
     <h1>明明專業洗衣</h1>
     <p>線上預約專車收送服務</p>
@@ -88,7 +94,8 @@
 
     <form id="bookingForm" onsubmit="submitForm(event)">
       
-      <div class="section-title">1. 客戶聯絡資訊</div>
+      <!-- 區塊 1 -->
+      <div class="section-title">1. 客戶與收送資訊</div>
       <div class="form-group">
         <label>姓名 *</label>
         <input type="text" id="name" required placeholder="請輸入姓名">
@@ -104,11 +111,16 @@
 
       <hr style="border:none; border-top:1px solid #eee; margin:25px 0;">
 
-      <div class="section-title">🧺 選擇送洗品項</div>
+      <!-- 區塊 2 -->
+      <div class="section-title">📦 2. 選擇送洗品項</div>
 
-      <div class="category-tabs" id="tabsContainer"></div>
+      <div class="category-scroll-wrapper">
+        <div class="category-tabs" id="tabsContainer"></div>
+      </div>
+      
       <div class="item-list" id="itemListContainer"></div>
 
+      <!-- 金額計算試算卡片 -->
       <div class="summary-card">
         <div class="summary-line"><span>洗滌費用小計：</span><span id="txtSubtotal">NT$ 0</span></div>
         <div class="summary-line"><span>運費：</span><span id="txtShipping">NT$ 0</span></div>
@@ -117,6 +129,7 @@
 
       <hr style="border:none; border-top:1px solid #eee; margin:25px 0;">
 
+      <!-- 區塊 3 -->
       <div class="section-title">3. 預約收送時間與備註</div>
       <div class="form-group">
         <label>希望收件日期 *</label>
@@ -142,7 +155,12 @@
 </div>
 
 <script>
-  // 11 大類別完整品項
+  // 1. 請替換為您從 Google Apps Script 部署獲得的網址
+  var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQaoEAxBnyzo1wVW7Wgv0yG9_hhyqgT9WB5QxDLoRNgpWKx4mwPOMAbShhLqjKBH7TjQ/exec"; 
+  
+  // 2. 您的 LINE 官方帳號 ID（已為您填入照片中的 @654mkark）
+  var LINE_ID = "@654mkark"; 
+
   var categories = [
     {
       name: "一般衣服類",
@@ -305,6 +323,7 @@
     renderTabs();
     renderItems(0);
     calculateSummary();
+    enableMouseDragScroll();
   });
 
   function renderTabs() {
@@ -394,70 +413,105 @@
     return { subtotal: subtotal, shipping: shipping, total: total, hasEstimate: hasEstimate };
   }
 
-  function submitForm(e) {
-    e.preventDefault();
+  function enableMouseDragScroll() {
+    var slider = document.getElementById('tabsContainer');
+    var isDown = false;
+    var startX;
+    var scrollLeft;
 
-    var submitBtn = document.getElementById("submitBtn");
-    submitBtn.disabled = true;
-    submitBtn.innerText = "預約處理中...";
+    slider.addEventListener('mousedown', function(e) {
+      isDown = true;
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
 
-    var summary = calculateSummary();
-    
+    slider.addEventListener('mouseleave', function() { isDown = false; });
+    slider.addEventListener('mouseup', function() { isDown = false; });
+
+    slider.addEventListener('mousemove', function(e) {
+      if (!isDown) return;
+      e.preventDefault();
+      var x = e.pageX - slider.offsetLeft;
+      var walk = (x - startX) * 2;
+      slider.scrollLeft = scrollLeft - walk;
+    });
+  }
+
+  /* 取得品項陣列 (用於組裝 LINE 訊息) */
+  function getSelectedItemsArray() {
     var selectedList = [];
     for (var c = 0; c < categories.length; c++) {
       for (var i = 0; i < categories[c].items.length; i++) {
         var item = categories[c].items[i];
         if (cart[item.id] && cart[item.id] > 0) {
-          selectedList.push(item.name + " x " + cart[item.id]);
+          selectedList.push("• " + item.name + " x" + cart[item.id]);
         }
       }
     }
+    return selectedList;
+  }
 
-    var itemsText = selectedList.length > 0 ? selectedList.join(", ") : "未點選（現場點交）";
+  /* 表單送出事件：同步寫入 Google 試算表並帶入訊息開啟 LINE */
+  function submitForm(e) {
+    e.preventDefault();
 
+    var selectedList = getSelectedItemsArray();
+    if (selectedList.length === 0) {
+      alert("請至少選擇一項送洗品項！");
+      return;
+    }
+
+    var submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = true;
+    submitBtn.innerText = "資料傳送中，請稍候...";
+
+    var summary = calculateSummary();
+    
     var formData = {
       name: document.getElementById("name").value,
       phone: document.getElementById("phone").value,
       address: document.getElementById("address").value,
       pickupDate: document.getElementById("pickupDate").value,
       pickupTime: document.getElementById("pickupTime").value,
-      itemsText: itemsText,
+      itemsDetail: selectedList.join(", "),
       subtotal: "NT$ " + summary.subtotal,
-      shipping: summary.shipping === 0 ? "免運" : "NT$ " + summary.shipping,
+      shipping: "NT$ " + summary.shipping,
       total: "NT$ " + summary.total + (summary.hasEstimate ? " (含估價)" : ""),
       note: document.getElementById("note").value || "無"
     };
 
-    var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9ObXPi7RAs_aJksENKEC89v6f2SyhMEdkoD7nAN4oCqUVQI9k5GUHINFaRO8u-ngB6w/exec";
-
+    // 發送資料至 Google Apps Script 寫入試算表
     fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
-    }).then(function() {
+    })
+    .then(function() {
+      // 這裡即為您圖片中的訊息組裝與 LINE 跳轉邏輯
       var lineMsg = "【明明專業洗衣 - 線上預約】\n" +
-        "-------------------------\n" +
+        "------------------------------\n" +
         "👤 姓名：" + formData.name + "\n" +
         "📞 電話：" + formData.phone + "\n" +
         "📍 地址：" + formData.address + "\n" +
-        "📅 時間：" + formData.pickupDate + " " + formData.pickupTime + "\n" +
+        "🗓 時間：" + formData.pickupDate + " " + formData.pickupTime + "\n" +
         "👕 送洗品項：\n" + selectedList.join("\n") + "\n\n" +
         "💰 費用試算：\n" +
         "• 小計：" + formData.subtotal + "\n" +
         "• 運費：" + formData.shipping + "\n" +
         "• 預估總金額：" + formData.total + "\n" +
         "📝 備註：" + formData.note + "\n" +
-        "-------------------------\n" +
+        "------------------------------\n" +
         "預約已送出，請等待店家專人確認！";
 
-      var LINE_ID = "@854mkark"; 
       var lineUrl = "https://line.me/R/oaMessage/" + LINE_ID + "/?" + encodeURIComponent(lineMsg);
 
       alert("預約成功！資料已寫入系統，點擊確定將跳轉至 LINE 送出對話訊息。");
       window.location.href = lineUrl;
-    }).catch(function(err) {
+    })
+    .catch(function(err) {
       alert("傳送失敗，請稍後再試。");
+      console.error("Error:", err);
       submitBtn.disabled = false;
       submitBtn.innerText = "送出預約並開啟 LINE";
     });
