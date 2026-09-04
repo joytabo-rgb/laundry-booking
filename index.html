@@ -347,10 +347,11 @@
 
 <script>
   // ⚠️ 1. 請填入您的 Google Apps Script 部署網址（如果不使用試算表可保持原樣）
-  const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyhDGimwB27yrCkAwKoACf_VWEbtBS-dezq9kZMtWa0RGUCbdC5Toc2Z7EgzsOMbGdaCQ/exec';
 
-  // ⚠️ 2. 請填入您的 LINE 官方帳號 ID（例如：@123abcd）
-  const lineID = 'YOUR_LINE_ID';
+  // ⚠️ 2. 請填入明明洗衣官方帳號的 LINE ID（請注意：不要加 @ 符號！）
+  // 例如官方帳號是 @123abcd，請填寫 '123abcd'
+  const lineID = '854mkark';
 
   // 明明專業洗衣 10 大分類完整價目表
   const priceData = {
@@ -547,8 +548,8 @@
     const itemsText = itemsArray.join("、");
     const totalText = document.getElementById("displayTotal").innerText;
 
-    // 發送背景請求至試算表
-    if (scriptURL && scriptURL !== 'https://script.google.com/macros/s/AKfycbyhDGimwB27yrCkAwKoACf_VWEbtBS-dezq9kZMtWa0RGUCbdC5Toc2Z7EgzsOMbGdaCQ/exec') {
+    // 發送背景請求至試算表 (Google Apps Script)
+    if (scriptURL && scriptURL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
       const payload = {
         name: name,
         phone: phone,
@@ -569,7 +570,7 @@
       });
     }
 
-    // 組合 LINE 訊息
+    // 組合 LINE 預約文字訊息
     const lineMessage = `👋 您好，我已完成線上送洗預約！
 ------------------
 👤 姓名：${name}
@@ -581,13 +582,16 @@
 💰 預估金額：${totalText}
 💬 備註：${note || '無'}`;
 
-    alert("預約已送出！按下「確定」後將自動跳轉至 LINE 發送細節。");
+    // 清理 ID 中的 @ 符號（避免輸入錯誤）
+    const cleanLineID = lineID.replace('@', '').trim();
 
-    // 跳轉至 LINE（若有填寫 lineID 則導向官方帳號，否則用文字分享連結）
-    if (lineID && lineID !== '@854mkark') {
-      window.location.href = `https://line.me/R/oaMessage/${lineID}/?${encodeURIComponent(lineMessage)}`;
+    if (cleanLineID && cleanLineID !== 'YOUR_LINE_ID') {
+      alert("預約已送出！按下「確定」將直接為您開啟官方帳號。");
+      // 直連官方帳號並帶入訊息
+      window.location.href = `https://line.me/R/oaMessage/${cleanLineID}/?${encodeURIComponent(lineMessage)}`;
     } else {
-      window.location.href = `https://line.me/R/msg/text/?${encodeURIComponent(lineMessage)}`;
+      alert("提示：尚未設定 LINE 官方帳號 ID，系統將改用通用分享模式。");
+      window.location.href = `https://line.me/R/share?text=${encodeURIComponent(lineMessage)}`;
     }
   }
 </script>
