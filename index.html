@@ -25,7 +25,7 @@
       margin: 0;
       padding: 0;
       color: var(--text-main);
-      padding-bottom: 90px; /* 為底部固定列預留空間 */
+      padding-bottom: 100px;
     }
 
     /* 頂部 Header 藍區 */
@@ -33,26 +33,25 @@
       background: linear-gradient(135deg, #0d6efd, #0b5ed7);
       color: white;
       text-align: center;
-      padding: 30px 15px 25px 15px;
+      padding: 25px 15px 20px 15px;
     }
 
     .header-banner h1 {
       margin: 0;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      letter-spacing: 1px;
     }
 
     .header-banner p {
-      margin: 8px 0 0 0;
-      font-size: 0.9rem;
+      margin: 6px 0 0 0;
+      font-size: 0.85rem;
       opacity: 0.9;
     }
 
     .main-container {
       max-width: 650px;
-      margin: -15px auto 20px auto;
-      padding: 0 15px;
+      margin: 15px auto;
+      padding: 0 12px;
     }
 
     /* 免運公告列 */
@@ -63,36 +62,35 @@
       text-align: center;
       padding: 10px;
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: bold;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      margin-bottom: 12px;
     }
 
     /* 白色卡片區塊 */
     .card {
       background: var(--card-bg);
       border-radius: 12px;
-      padding: 20px;
+      padding: 18px;
       margin-bottom: 15px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
-    /* 藍色左邊條小標題 */
+    /* 標題 */
     .section-title {
       display: flex;
       align-items: center;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--primary-blue);
-      margin-bottom: 18px;
+      margin-bottom: 15px;
     }
 
     .section-title::before {
       content: "";
       display: inline-block;
       width: 4px;
-      height: 18px;
+      height: 16px;
       background-color: var(--primary-blue);
       margin-right: 8px;
       border-radius: 2px;
@@ -100,41 +98,39 @@
 
     /* 表單元件 */
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     .form-group label {
       display: block;
       font-weight: 600;
-      font-size: 0.92rem;
-      margin-bottom: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
       color: #444;
     }
 
     .form-control {
       width: 100%;
-      padding: 12px 14px;
+      padding: 10px 12px;
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       background-color: #fafafa;
-      transition: all 0.2s;
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--primary-blue);
       background-color: #fff;
-      box-shadow: 0 0 0 3px rgba(11, 94, 215, 0.1);
     }
 
     /* 分類膠囊按鈕 (橫向滾動) */
     .category-scroll {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       overflow-x: auto;
-      padding-bottom: 12px;
-      margin-bottom: 15px;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
       -webkit-overflow-scrolling: touch;
     }
 
@@ -148,23 +144,22 @@
     }
 
     .cat-btn {
-      padding: 8px 18px;
+      padding: 7px 15px;
       border-radius: 20px;
       border: 1px solid var(--border-color);
-      background-color: #e9ecef;
+      background-color: #f1f3f5;
       color: #495057;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.2s;
+      flex-shrink: 0;
     }
 
     .cat-btn.active {
       background-color: var(--primary-blue);
       color: #ffffff;
       border-color: var(--primary-blue);
-      box-shadow: 0 2px 6px rgba(11, 94, 215, 0.3);
     }
 
     /* 品項清單 */
@@ -178,7 +173,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 15px;
+      padding: 10px 12px;
       border: 1px solid var(--border-color);
       border-radius: 8px;
       background-color: #fff;
@@ -186,24 +181,24 @@
 
     .item-name {
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     .item-price {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: #dc3545;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     .qty-control {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn-qty {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       border: 1px solid var(--primary-blue);
       background-color: #fff;
@@ -214,6 +209,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 0;
+      line-height: 1;
     }
 
     .btn-qty.add {
@@ -223,8 +220,8 @@
 
     .qty-num {
       font-weight: bold;
-      font-size: 1rem;
-      min-width: 18px;
+      font-size: 0.95rem;
+      min-width: 16px;
       text-align: center;
     }
 
@@ -236,11 +233,11 @@
       right: 0;
       background-color: #ffffff;
       border-top: 1px solid var(--border-color);
-      padding: 12px 20px;
+      padding: 10px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 -3px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.08);
       z-index: 1000;
     }
 
@@ -250,13 +247,13 @@
     }
 
     .total-amount {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #dc3545;
     }
 
     .shipping-info {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -265,17 +262,11 @@
       background-color: var(--line-green);
       color: white;
       border: none;
-      padding: 12px 22px;
+      padding: 10px 16px;
       border-radius: 8px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3);
-      transition: background-color 0.2s;
-    }
-
-    .btn-submit-line:hover {
-      background-color: #218838;
     }
   </style>
 </head>
@@ -329,7 +320,7 @@
 
       <div class="form-group">
         <label>備註事項</label>
-        <textarea id="orderNote" class="form-control" rows="3" placeholder="特殊洗滌需求或管理室代收等"></textarea>
+        <textarea id="orderNote" class="form-control" rows="2" placeholder="特殊洗滌需求或管理室代收等"></textarea>
       </div>
     </div>
 
@@ -355,10 +346,13 @@
   </div>
 
 <script>
-  // ⚠️ 請貼上您的 Google Apps Script 部署 URL 網址
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzgJtCLPCNK_c8m7Xs1h1pmV4euFPMQi-NmG9M4XWo-eJr4F98jHRsdsunC9BvC6B4KMg/exec';
+  // ⚠️ 1. 請填入您的 Google Apps Script 部署網址（如果不使用試算表可保持原樣）
+  const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
 
-  // 明明專業洗衣 10 大分類完整價目表資料庫
+  // ⚠️ 2. 請填入您的 LINE 官方帳號 ID（例如：@123abcd）
+  const lineID = 'YOUR_LINE_ID';
+
+  // 明明專業洗衣 10 大分類完整價目表
   const priceData = {
     "一般衣服類": [
       { name: "西裝", price: 150 }, { name: "襯衫", price: 60 }, { name: "T SHIRT", price: 80 },
@@ -420,26 +414,27 @@
     ]
   };
 
-  // 儲存使用者所選品項與數量（例如：{ "西裝": 1, "襯衫": 2 }）
   let cart = {};
   let currentCategory = "一般衣服類";
 
-  // 頁面載入初始化
-  window.onload = function() {
+  // DOM 載入完畢後執行渲染
+  document.addEventListener("DOMContentLoaded", function() {
     renderCategories();
     renderItemList(currentCategory);
-  };
+  });
 
-  // 渲染 10 大分類按鈕
+  // 渲染分類按鈕
   function renderCategories() {
     const categoryContainer = document.getElementById("categoryContainer");
+    if (!categoryContainer) return;
     categoryContainer.innerHTML = "";
 
     Object.keys(priceData).forEach(cat => {
       const btn = document.createElement("button");
+      btn.type = "button";
       btn.className = `cat-btn ${cat === currentCategory ? 'active' : ''}`;
       btn.innerText = cat;
-      btn.onclick = () => {
+      btn.onclick = function() {
         currentCategory = cat;
         renderCategories();
         renderItemList(cat);
@@ -448,9 +443,10 @@
     });
   }
 
-  // 渲染特定分類下的商品列表
+  // 渲染商品清單
   function renderItemList(category) {
     const container = document.getElementById("itemListContainer");
+    if (!container) return;
     container.innerHTML = "";
 
     const items = priceData[category] || [];
@@ -467,16 +463,16 @@
           <div class="item-price">${displayPrice}</div>
         </div>
         <div class="qty-control">
-          ${qty > 0 ? `<button class="btn-qty" onclick="changeQty('${item.name}', -1)">-</button>` : ''}
+          ${qty > 0 ? `<button type="button" class="btn-qty" onclick="changeQty('${item.name}', -1)">-</button>` : ''}
           ${qty > 0 ? `<span class="qty-num">${qty}</span>` : ''}
-          <button class="btn-qty add" onclick="changeQty('${item.name}', 1)">+</button>
+          <button type="button" class="btn-qty add" onclick="changeQty('${item.name}', 1)">+</button>
         </div>
       `;
       container.appendChild(row);
     });
   }
 
-  // 修改品項數量
+  // 增減品項數量
   function changeQty(itemName, amount) {
     const currentQty = cart[itemName] || 0;
     const newQty = currentQty + amount;
@@ -491,7 +487,7 @@
     calculateTotal();
   }
 
-  // 計算金額與運費
+  // 計算總價
   function calculateTotal() {
     let subtotal = 0;
     let hasQuote = false;
@@ -524,7 +520,8 @@
       ? "滿 NT$400 免運費" 
       : "未滿 NT$400 運費 NT$100";
   }
-// 送出預約單（發送 GAS 資料至 Google 試算表及自動跳轉 LINE）
+
+  // 送出預約
   function submitOrder() {
     const name = document.getElementById("custName").value.trim();
     const phone = document.getElementById("custPhone").value.trim();
@@ -543,7 +540,6 @@
       return;
     }
 
-    // 1. 整理購物車清單字串
     let itemsArray = [];
     for (let itemName in cart) {
       itemsArray.push(`${itemName} x${cart[itemName]}`);
@@ -551,20 +547,20 @@
     const itemsText = itemsArray.join("、");
     const totalText = document.getElementById("displayTotal").innerText;
 
-    // 2. 打包發送至 Google Apps Script 試算表
-    const payload = {
-      name: name,
-      phone: phone,
-      address: address,
-      pickupDate: date,
-      pickupTime: time,
-      items: itemsText,
-      totalPrice: totalText,
-      note: note,
-      timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
-    };
+    // 發送背景請求至試算表
+    if (scriptURL && scriptURL !== 'https://script.google.com/macros/s/AKfycbyhDGimwB27yrCkAwKoACf_VWEbtBS-dezq9kZMtWa0RGUCbdC5Toc2Z7EgzsOMbGdaCQ/exec') {
+      const payload = {
+        name: name,
+        phone: phone,
+        address: address,
+        pickupDate: date,
+        pickupTime: time,
+        items: itemsText,
+        totalPrice: totalText,
+        note: note,
+        timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
+      };
 
-    if (scriptURL && scriptURL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
       fetch(scriptURL, {
         method: "POST",
         mode: "no-cors",
@@ -573,7 +569,7 @@
       });
     }
 
-    // 3. 組合 LINE 預約訊息文字
+    // 組合 LINE 訊息
     const lineMessage = `👋 您好，我已完成線上送洗預約！
 ------------------
 👤 姓名：${name}
@@ -585,14 +581,16 @@
 💰 預估金額：${totalText}
 💬 備註：${note || '無'}`;
 
-    // ⚠️ 請替換為您的 LINE 官方帳號 ID（例如 @swiss_laundry）或個人 LINE ID
-    const lineID = "@854mkark"; 
+    alert("預約已送出！按下「確定」後將自動跳轉至 LINE 發送細節。");
 
-    // 4. 彈出提示並自動開啟 LINE App 帶入訊息
-    alert("預約已送出！按「確定」將為您開啟 LINE 傳送預約細節。");
-
-    // 自動跳轉至 LINE
-    const lineUrl = `https://line.me/R/oaMessage/${lineID}/?${encodeURIComponent(lineMessage)}`;
-    window.location.href = lineUrl;
+    // 跳轉至 LINE（若有填寫 lineID 則導向官方帳號，否則用文字分享連結）
+    if (lineID && lineID !== '@854mkark') {
+      window.location.href = `https://line.me/R/oaMessage/${lineID}/?${encodeURIComponent(lineMessage)}`;
+    } else {
+      window.location.href = `https://line.me/R/msg/text/?${encodeURIComponent(lineMessage)}`;
+    }
   }
-  
+</script>
+
+</body>
+</html>
