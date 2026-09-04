@@ -17,7 +17,7 @@
       padding-bottom: 40px;
     }
     
-    /* 頂部藍色招牌 Header */
+    /* 頂部藍色招牌 Banner */
     .header-banner {
       background: linear-gradient(135deg, #1e40af, #3b82f6);
       color: white;
@@ -122,11 +122,14 @@
       color: #ffffff;
     }
 
-    /* 品項清單卡片 */
+    /* 品項清單列表 */
     .item-list {
       display: flex;
       flex-direction: column;
       gap: 12px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
     .item-row {
       display: flex;
@@ -143,14 +146,18 @@
       font-size: 0.95rem;
       color: #1f2937;
     }
-    .item-price {
-      font-size: 0.85rem;
-      color: #2563eb;
+    .item-price-badge {
+      display: inline-block;
+      background-color: #2563eb;
+      color: white;
+      font-size: 0.78rem;
       font-weight: 600;
-      margin-top: 2px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-top: 4px;
     }
 
-    /* 數量按鈕 */
+    /* 數量選擇按鈕 */
     .counter-group {
       display: flex;
       align-items: center;
@@ -160,18 +167,18 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
+      border: 1px solid #2563eb;
+      background: #ffffff;
       font-size: 1.1rem;
       font-weight: bold;
-      color: #334155;
+      color: #2563eb;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .btn-counter:active {
-      background: #e2e8f0;
+      background: #eff6ff;
     }
     .count-display {
       width: 24px;
@@ -186,7 +193,7 @@
       border: 1px solid #e2e8f0;
       border-radius: 10px;
       padding: 14px;
-      margin-top: 12px;
+      margin-top: 16px;
     }
     .summary-row {
       display: flex;
@@ -204,7 +211,6 @@
       color: #1e3a8a;
     }
 
-    /* 送出按鈕 */
     .btn-submit {
       width: 100%;
       padding: 14px;
@@ -226,13 +232,13 @@
 </head>
 <body>
 
-  <!-- 頁頭藍色招牌 -->
+  <!-- 頂部招牌 Banner -->
   <div class="header-banner">
     <h1>明明專業洗衣</h1>
     <p>線上預約專車收送服務</p>
   </div>
 
-  <!-- 免運提示 Banner -->
+  <!-- 免運提示 -->
   <div class="notice-banner">
     消費滿 NT$ 400 免收運費（未達門檻另收 NT$ 100 運費）
   </div>
@@ -257,17 +263,17 @@
         </div>
       </div>
 
-      <!-- 2. 分類送洗品項 -->
+      <!-- 2. 分類送洗品項 (與價目表完全一致) -->
       <div class="card-section">
         <div class="section-title">2. 選擇送洗品項</div>
         
-        <!-- 分類頁籤列 -->
+        <!-- 10 大頁籤分類 -->
         <div class="tabs-container" id="tabsContainer"></div>
 
         <!-- 品項內容區域 -->
         <div class="item-list" id="itemsContainer"></div>
 
-        <!-- 費用小計卡片 -->
+        <!-- 試算小計卡片 -->
         <div class="summary-card">
           <div class="summary-row">
             <span>洗滌費用小計：</span>
@@ -312,69 +318,172 @@
   </div>
 
 <script>
-  // 請填入您的 Google Apps Script Web App URL
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQaoEAxBnyzo1wVW7Wgv0yG9_hhyqgT9WB5QxDLoRNgpWKx4mwPOMAbShhLqjKBH7TjQ/exec";
+  // 請貼上您的 Google Apps Script 網頁應用程式 URL
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDaCzvqhJRGDxGqGuJPjK3tZyf9RGmal3kri2akeZ1C0pA0yLEOG7sZbAzC6Qwakc0Eg/exec";
   
-  // 您的 LINE 官方帳號 ID（已為您鎖定：654mkark，不帶@）
-  const LINE_ID = "654mkark";
+  // 您的 LINE 官方帳號 ID（含 @ 符號）
+  const LINE_ID = "@654mkark";
 
-  // 完整分類品項資料
+  // 根據「明明專業洗衣洗衣價格表」圖片完整重構的資料庫
   const categories = [
     {
       name: "一般衣服類",
       items: [
         { id: "c1_1", name: "西裝", price: 150 },
         { id: "c1_2", name: "襯衫", price: 60 },
-        { id: "c1_3", name: "T SHIRT", price: 60 },
-        { id: "c1_4", name: "POLO衫", price: 60 },
-        { id: "c1_5", name: "長褲 / 短褲", price: 120 }
+        { id: "c1_3", name: "T SHIRT", price: 80 },
+        { id: "c1_4", name: "POLO衫", price: 100 },
+        { id: "c1_5", name: "上衣", price: 120 },
+        { id: "c1_6", name: "運動衫", price: 100 },
+        { id: "c1_7", name: "夾克", price: 180 },
+        { id: "c1_8", name: "短外套", price: 180 },
+        { id: "c1_9", name: "大衣", price: 300 },
+        { id: "c1_10", name: "風衣", price: 400 },
+        { id: "c1_11", name: "洋裝", price: 180 },
+        { id: "c1_12", name: "連身服", price: 200 },
+        { id: "c1_13", name: "旗袍", price: 250 },
+        { id: "c1_14", name: "棉襖", price: 250 },
+        { id: "c1_15", name: "毛衣", price: 150 },
+        { id: "c1_16", name: "毛料背心", price: 150 },
+        { id: "c1_17", name: "薄背心", price: 120 },
+        { id: "c1_18", name: "刷毛背心", price: 150 },
+        { id: "c1_19", name: "鋪棉背心", price: 180 },
+        { id: "c1_20", name: "羽絨背心", price: 250 },
+        { id: "c1_21", name: "輕羽絨衣", price: 250 },
+        { id: "c1_22", name: "羽絨衣", price: 300 },
+        { id: "c1_23", name: "羽絨衣中長", price: 350 },
+        { id: "c1_24", name: "羽絨大衣", price: 450 },
+        { id: "c1_25", name: "睡袍", price: 200 },
+        { id: "c1_26", name: "浴袍", price: 200 },
+        { id: "c1_27", name: "合成皮外套", price: 300 }
       ]
     },
     {
       name: "機能性品項類",
       items: [
-        { id: "c2_1", name: "羽絨外套 / 大衣", price: 350 },
-        { id: "c2_2", name: "防風防水外套", price: 250 },
-        { id: "c2_3", name: "雪服 / 雪褲", price: 300 }
+        { id: "c2_1", name: "機能型外套", price: 400 },
+        { id: "c2_2", name: "GORE-TEX 衣服", price: 400 },
+        { id: "c2_3", name: "GORE-TEX 褲子", price: 400 },
+        { id: "c2_4", name: "雪衣", price: 600 },
+        { id: "c2_5", name: "連身雪衣", price: 1000 },
+        { id: "c2_6", name: "雪褲", price: 600 },
+        { id: "c2_7", name: "吊帶褲", price: 800 },
+        { id: "c2_8", name: "防寒手套", price: 300 },
+        { id: "c2_9", name: "GORE-TEX 撥水加工", price: 500 },
+        { id: "c2_10", name: "雪衣 撥水加工", price: 600 },
+        { id: "c2_11", name: "雪褲 撥水加工", price: 600 },
+        { id: "c2_12", name: "連身衣 撥水加工", price: 1000 },
+        { id: "c2_13", name: "吊帶褲 撥水加工", price: 600 },
+        { id: "c2_14", name: "防寒手套 撥水加工", price: 200 }
       ]
     },
     {
-      name: "被單類",
+      name: "裙褲類",
       items: [
-        { id: "c3_1", name: "單人被單/床包", price: 180 },
-        { id: "c3_2", name: "雙人被單/床包", price: 250 },
-        { id: "c3_3", name: "厚被毯", price: 350 }
+        { id: "c3_1", name: "西褲", price: 100 },
+        { id: "c3_2", name: "女長褲", price: 100 },
+        { id: "c3_3", name: "牛仔褲", price: 150 },
+        { id: "c3_4", name: "休閒褲", price: 120 },
+        { id: "c3_5", name: "運動褲", price: 100 },
+        { id: "c3_6", name: "短褲", price: 80 },
+        { id: "c3_7", name: "短裙", price: 80 },
+        { id: "c3_8", name: "褲裙", price: 100 },
+        { id: "c3_9", name: "長裙", price: 150 },
+        { id: "c3_10", name: "毛裙", price: 180 },
+        { id: "c3_11", name: "絲絨裙", price: 200 },
+        { id: "c3_12", name: "半摺裙", price: 150 },
+        { id: "c3_13", name: "百摺裙", price: 200 },
+        { id: "c3_14", name: "合成皮褲", price: 200 },
+        { id: "c3_15", name: "合成皮裙", price: 200 }
       ]
     },
     {
       name: "禮服類",
       items: [
-        { id: "c4_1", name: "小禮服", price: 300 },
-        { id: "c4_2", name: "晚禮服/婚紗", price: 600 }
+        { id: "c4_1", name: "兒童禮服", price: 200 },
+        { id: "c4_2", name: "短禮服", price: 400 },
+        { id: "c4_3", name: "長禮服", price: 700 },
+        { id: "c4_4", name: "新娘禮服", price: 1500 }
       ]
     },
     {
       name: "寢具用品類",
       items: [
-        { id: "c5_1", name: "枕頭套", price: 50 },
-        { id: "c5_2", name: "抱枕", price: 100 }
+        { id: "c5_1", name: "枕頭套", price: 80 },
+        { id: "c5_2", name: "抱枕套", price: 80 },
+        { id: "c5_3", name: "抱枕", price: 120 },
+        { id: "c5_4", name: "枕頭芯", price: 400 },
+        { id: "c5_5", name: "床單薄", price: 160 },
+        { id: "c5_6", name: "床單厚", price: 200 },
+        { id: "c5_7", name: "被套薄", price: 160 },
+        { id: "c5_8", name: "被套厚", price: 200 },
+        { id: "c5_9", name: "保潔墊", price: 170 },
+        { id: "c5_10", name: "涼被", price: 400 },
+        { id: "c5_11", name: "棉被單人", price: 500 },
+        { id: "c5_12", name: "棉被雙人", price: 700 },
+        { id: "c5_13", name: "毛絨被", price: 400 },
+        { id: "c5_14", name: "毛毯", price: 500 },
+        { id: "c5_15", name: "羽絨", price: 700 },
+        { id: "c5_16", name: "羊毛", price: 700 },
+        { id: "c5_17", name: "蠶絲被", price: 700 },
+        { id: "c5_18", name: "睡袋", price: 500 },
+        { id: "c5_19", name: "腳踏墊", price: 150 }
       ]
     },
     {
-      name: "包包與其他",
+      name: "沙發用品類",
       items: [
-        { id: "c6_1", name: "各式包包清洗", price: 0, isEstimate: true }
+        { id: "c6_1", name: "單人沙發套", price: 150 },
+        { id: "c6_2", name: "雙人沙發套", price: 300 },
+        { id: "c6_3", name: "三人沙發套", price: 400 },
+        { id: "c6_4", name: "桌巾", price: 150 }
+      ]
+    },
+    {
+      name: "玩偶類",
+      items: [
+        { id: "c7_1", name: "毛絨玩偶長度30公分", price: 150 },
+        { id: "c7_2", name: "毛絨小型玩偶60公分", price: 250 },
+        { id: "c7_3", name: "毛絨中型玩偶90公分", price: 400 },
+        { id: "c7_4", name: "毛絨大型玩偶120公分", price: 500 }
+      ]
+    },
+    {
+      name: "小件類",
+      items: [
+        { id: "c8_1", name: "領帶", price: 80 },
+        { id: "c8_2", name: "手套", price: 80 },
+        { id: "c8_3", name: "絲巾", price: 150 },
+        { id: "c8_4", name: "圍巾薄", price: 200 },
+        { id: "c8_5", name: "圍巾厚", price: 300 },
+        { id: "c8_6", name: "披肩", price: 300 },
+        { id: "c8_7", name: "棒球帽", price: 150 },
+        { id: "c8_8", name: "毛帽", price: 150 }
+      ]
+    },
+    {
+      name: "其他類",
+      items: [
+        { id: "c9_1", name: "窗簾120公分(摺)", price: 80 },
+        { id: "c9_2", name: "窗簾180公分(摺)", price: 100 },
+        { id: "c9_3", name: "窗簾210公分(摺)", price: 120 },
+        { id: "c9_4", name: "地毯", price: 0, isEstimate: true },
+        { id: "c9_5", name: "各式包包清洗", price: 0, isEstimate: true }
+      ]
+    },
+    {
+      name: "特殊處理",
+      items: [
+        { id: "c10_1", name: "黃斑特殊處理", price: 0, isEstimate: true },
+        { id: "c10_2", name: "染色處理", price: 0, isEstimate: true }
       ]
     }
   ];
 
-  // 記錄每個品項的選購數量
   const itemCounts = {};
   let currentCategoryIndex = 0;
 
-  // 初始化選單與頁籤
   function initApp() {
-    // 預先將所有品項數量歸零
     categories.forEach(cat => {
       cat.items.forEach(item => {
         itemCounts[item.id] = 0;
@@ -385,7 +494,7 @@
     renderItems(0);
   }
 
-  // 渲染分類頁籤
+  // 渲染頁籤列
   function renderTabs() {
     const tabsContainer = document.getElementById("tabsContainer");
     tabsContainer.innerHTML = "";
@@ -404,7 +513,7 @@
     });
   }
 
-  // 渲染特定分類下的品項
+  // 渲染品項
   function renderItems(catIndex) {
     const itemsContainer = document.getElementById("itemsContainer");
     itemsContainer.innerHTML = "";
@@ -414,13 +523,13 @@
       const row = document.createElement("div");
       row.className = "item-row";
       
-      const priceText = item.isEstimate ? "專人另行估價" : `NT$ ${item.price}`;
+      const priceText = item.isEstimate ? "專人估價" : `NT$ ${item.price}`;
       const count = itemCounts[item.id] || 0;
 
       row.innerHTML = `
         <div class="item-info">
           <div class="item-name">${item.name}</div>
-          <div class="item-price">${priceText}</div>
+          <div class="item-price-badge">${priceText}</div>
         </div>
         <div class="counter-group">
           <button type="button" class="btn-counter" onclick="updateCount('${item.id}', -1)">-</button>
@@ -432,7 +541,6 @@
     });
   }
 
-  // 更新品項數量
   function updateCount(itemId, delta) {
     if ((itemCounts[itemId] || 0) + delta >= 0) {
       itemCounts[itemId] = (itemCounts[itemId] || 0) + delta;
@@ -445,7 +553,6 @@
     }
   }
 
-  // 計算費用小計與運費 (滿 400 元免收 100 元運費)
   function calculateSummary() {
     let subtotal = 0;
     let hasEstimateItem = false;
@@ -465,7 +572,6 @@
       });
     });
 
-    // 運費規則：未滿 400 元加收 100 元運費
     let shipping = (subtotal < 400 && totalItems > 0) ? 100 : 0;
     let total = subtotal + shipping;
 
@@ -476,7 +582,6 @@
     return { subtotal, shipping, total, hasEstimate: hasEstimateItem };
   }
 
-  // 取得已選購品項文字字串
   function getSelectedItemsArray() {
     const list = [];
     categories.forEach(cat => {
@@ -491,7 +596,6 @@
     return list;
   }
 
-  // 表單送出處理
   function submitForm(e) {
     e.preventDefault();
 
@@ -520,7 +624,6 @@
       note: document.getElementById("note").value || "無"
     };
 
-    // 組合 LINE 訊息
     const lineMsg = "【明明專業洗衣 - 線上預約】\n" +
       "------------------------------\n" +
       "👤 姓名：" + formData.name + "\n" +
@@ -536,10 +639,8 @@
       "------------------------------\n" +
       "預約已送出，請等待店家專人確認！";
 
-    // 直接跳轉到與 654mkark 官方帳號聊天室，並填入訊息
-    const lineUrl = "https://line.me/R/oaMessage/" + LINE_ID + "/?" + encodeURIComponent(lineMsg);
+    const lineUrl = "https://line.me/R/oaMessage/" + encodeURIComponent(LINE_ID) + "/?" + encodeURIComponent(lineMsg);
 
-    // 傳送資料給 Google Apps Script 寫入試算表
     fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
@@ -549,8 +650,6 @@
     .then(function() {
       submitBtn.disabled = false;
       submitBtn.innerText = "送出預約並開啟 LINE";
-
-      // 跳轉至官方帳號聊天室
       window.location.href = lineUrl;
     })
     .catch(function(err) {
@@ -561,10 +660,8 @@
     });
   }
 
-  // 網頁載入完成初始化
   window.onload = function() {
     initApp();
-    // 預設日期為明天
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     document.getElementById("pickupDate").value = tomorrow.toISOString().split('T')[0];
