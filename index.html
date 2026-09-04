@@ -219,6 +219,9 @@
 <script>
   // 請填入您的 Google Apps Script Web App URL
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQaoEAxBnyzo1wVW7Wgv0yG9_hhyqgT9WB5QxDLoRNgpWKx4mwPOMAbShhLqjKBH7TjQ/exec";
+  
+  // 您的 LINE 官方帳號 ID（請勿加 @）
+  const LINE_ID = "654mkark";
 
   // 送洗品項清單資料
   const itemsData = [
@@ -283,7 +286,7 @@
       }
     });
 
-    // 運費規則：未滿 500 元加收 80 元運費（可自行調整）
+    // 運費規則：未滿 500 元加收 80 元運費
     let shipping = (subtotal < 500 && totalItems > 0) ? 80 : 0;
     let total = subtotal + shipping;
 
@@ -336,7 +339,7 @@
       note: document.getElementById("note").value || "無"
     };
 
-    // 組合 LINE 訊息內容
+    // 組合 LINE 預約訊息內容
     const lineMsg = "【明明專業洗衣 - 線上預約】\n" +
       "------------------------------\n" +
       "👤 姓名：" + formData.name + "\n" +
@@ -352,10 +355,11 @@
       "------------------------------\n" +
       "預約已送出，請等待店家專人確認！";
 
-    // 使用通用的 LINE 分享文字連結
-    const lineUrl = "https://line.me/R/share?text=" + encodeURIComponent(lineMsg);
+    // 直連指定官方帳號聊天室並帶入文字
+    const cleanLineId = LINE_ID.replace("@", "");
+    const lineUrl = "https://line.me/R/oaMessage/" + cleanLineId + "/?" + encodeURIComponent(lineMsg);
 
-    // 發送資料至 Google Apps Script
+    // 發送資料至 Google Apps Script 試算表
     fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
@@ -363,11 +367,10 @@
       body: JSON.stringify(formData)
     })
     .then(function() {
-      // 復原按鈕狀態
       submitBtn.disabled = false;
       submitBtn.innerText = "送出預約並開啟 LINE";
 
-      // 開啟 LINE 分享/傳送畫面
+      // 直接跳轉至與官方帳號的對話框
       window.location.href = lineUrl;
     })
     .catch(function(err) {
