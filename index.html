@@ -372,14 +372,13 @@
   <!-- 自訂提示彈窗 -->
   <div id="customModal" class="custom-modal-overlay">
     <div class="custom-modal">
-      <p id="customModalText">預約資料已自動複製！按「確定」將直接開啟明明洗衣官方帳號，貼上訊息傳送即可完成預約！</p>
+      <p id="customModalText">預約資料已準備就緒！按下「確定」將直接開啟 LINE 並自動填入預約訊息。</p>
       <button class="custom-modal-btn" onclick="closeModalAndRedirect()">確定</button>
     </div>
   </div>
 
   <script>
-    const lineID = "@854mkark";
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzAkz91FW9DmyG1HzkmthUKTfVOn625uB3Ublukpro0Whs1WKCaZwdcWczPFhdqmVOyjQ/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwq-1O9uTylI4I5e5qWkIsM7IvgQfO49tXqU45e3r6t11Rj8W9z_Jz8v-K3R/exec";
 
     // 依據價目表整理的完整品項資料
     const laundryData = {
@@ -665,19 +664,19 @@
         });
       }
 
-      // 組合 LINE 訊息內容
-      const lineMessage = `👋 您好，我已完成線上送洗預約！
-------------------
+      // 組合 LINE 訊息內容（格式與綠色對話框對齊）
+      const lineMessage = `------------------
 👤 姓名：${name}
 📞 電話：${phone}
-🏠 地址：${address}
-📅 預約收件日期：${date}
-⏰ 預約收件時段：${time}
-🧺 送洗品項：${itemsText}
-💰 預估金額：${totalText}
-💬 備註：${note || '無'}`;
+📍 地址：${address}
+📅 時間：${date} ${time}
+👕 品項：${itemsText}
+💵 預估金額：${totalText}
+📝 備註：${note || '無'}
+------------------
+已送出預約，請店家確認收件時間！`;
 
-      // 複製訊息
+      // 同時備份至剪貼簿（以防部分裝置限制自動帶入）
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(lineMessage);
       } else {
@@ -689,14 +688,10 @@
         document.body.removeChild(textArea);
       }
 
-      // 設定 LINE 開啟連結
-      let formattedLineID = lineID.trim();
-      if (formattedLineID.startsWith('@')) {
-        formattedLineID = formattedLineID.substring(1);
-      }
-      redirectUrl = `https://line.me/R/ti/p/%40${formattedLineID}`;
+      // 改用 LINE 分享 URI（可自動帶入文字至 LINE 對話框）
+      redirectUrl = `https://line.me/R/share?text=${encodeURIComponent(lineMessage)}`;
 
-      showCustomModal("預約資料已自動複製！按「確定」將直接開啟明明洗衣官方帳號，貼上訊息傳送即可完成預約！", true);
+      showCustomModal("預約資料已準備就緒！按下「確定」將開啟 LINE 並自動填入預約訊息，直接點擊傳送即可。", true);
     }
 
     function showCustomModal(msg, hasRedirect) {
