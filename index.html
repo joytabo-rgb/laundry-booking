@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>明明專業洗衣 - 線上預約收送系統</title>
+  <title>明明專業洗衣 - 線上預約系統</title>
+  <!-- 引入 LINE LIFF SDK -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
     :root {
       --primary-color: #0d6efd;
@@ -26,7 +28,6 @@
       padding-bottom: 110px;
     }
 
-    /* 藍色大表頭區塊 */
     header {
       background-color: #0b5ed7;
       color: #ffffff;
@@ -47,7 +48,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* 滿額免運提示區塊 */
     .shipping-banner {
       background-color: #fef3d6;
       color: #664d03;
@@ -110,7 +110,6 @@
       border-color: var(--primary-color);
     }
 
-    /* 分頁選單 */
     .tabs-wrapper {
       overflow-x: auto;
       white-space: nowrap;
@@ -139,7 +138,6 @@
       font-weight: bold;
     }
 
-    /* 品項清單 */
     .items-list {
       max-height: 380px;
       overflow-y: auto;
@@ -171,7 +169,6 @@
       margin-top: 2px;
     }
 
-    /* 加減數量按鈕 */
     .quantity-control {
       display: flex;
       align-items: center;
@@ -205,7 +202,6 @@
       font-size: 1rem;
     }
 
-    /* 底部固定結帳列 */
     .checkout-bar {
       position: fixed;
       bottom: 0;
@@ -249,7 +245,6 @@
       cursor: pointer;
     }
 
-    /* 自訂提示彈窗 */
     .custom-modal-overlay {
       display: none;
       position: fixed;
@@ -275,8 +270,8 @@
 
     .custom-modal p {
       margin: 0 0 20px 0;
-      font-size: 1rem;
-      line-height: 1.5;
+      font-size: 0.95rem;
+      line-height: 1.6;
       color: #333;
       font-weight: 600;
     }
@@ -296,19 +291,16 @@
 </head>
 <body>
 
-  <!-- 頂部藍色大表頭 -->
   <header>
     <h1>明明專業洗衣</h1>
     <p>專業．舒適．放心的到府收送線上預約服務</p>
   </header>
 
-  <!-- 免運提示欄 -->
   <div class="shipping-banner">
     🚚 滿 NT$400 免運費，未滿酌收 NT$100
   </div>
 
   <div class="container">
-    <!-- 1. 客戶與收送資訊 -->
     <div class="section-card">
       <div class="section-title">👤 1. 收送資訊</div>
       
@@ -348,19 +340,13 @@
       </div>
     </div>
 
-    <!-- 2. 選擇送洗品項 -->
     <div class="section-card">
       <div class="section-title">🧺 2. 選擇送洗品項</div>
-      
-      <!-- 動態分類頁籤 -->
       <div class="tabs-wrapper" id="categoryTabs"></div>
-
-      <!-- 品項清單 -->
       <div class="items-list" id="itemsContainer"></div>
     </div>
   </div>
 
-  <!-- 底部固定結帳列 -->
   <div class="checkout-bar">
     <div class="total-info">
       <div class="total-price" id="displayTotal">NT$ 0</div>
@@ -369,18 +355,18 @@
     <button class="btn-submit" onclick="submitOrder()">送出預約並開啟 LINE</button>
   </div>
 
-  <!-- 自訂提示彈窗 -->
   <div id="customModal" class="custom-modal-overlay">
     <div class="custom-modal">
-      <p id="customModalText">預約資料已準備就緒！按下「確定」將直接開啟 LINE 並自動填入預約訊息。</p>
-      <button class="custom-modal-btn" onclick="closeModalAndRedirect()">確定</button>
+      <p id="customModalText">預約處理中...</p>
+      <button class="custom-modal-btn" onclick="closeModal()">確定</button>
     </div>
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwq-1O9uTylI4I5e5qWkIsM7IvgQfO49tXqU45e3r6t11Rj8W9z_Jz8v-K3R/exec";
+    // 代入您的 LIFF ID
+    const MY_LIFF_ID = "2011400784-69V5deMW";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzAkz91FW9DmyG1HzkmthUKTfVOn625uB3Ublukpro0Whs1WKCaZwdcWczPFhdqmVOyjQ/exec";
 
-    // 依據價目表整理的完整品項資料
     const laundryData = {
       "一般衣服類": [
         { name: "西裝", price: 150 },
@@ -508,13 +494,21 @@
 
     let selectedCart = {};
     let currentCategory = "一般衣服類";
-    let redirectUrl = '';
 
     window.onload = function() {
+      // 初始化 LIFF SDK
+      liff.init({ liffId: MY_LIFF_ID })
+        .then(() => {
+          console.log("LIFF 初始化成功");
+        })
+        .catch((err) => {
+          console.error("LIFF 初始化失敗:", err);
+        });
+
       renderTabs();
       renderItems(currentCategory);
 
-      // 自動將預約收件日期帶入明天的日期
+      // 設定預設預約日期為明天
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       const yyyy = tomorrow.getFullYear();
@@ -523,7 +517,6 @@
       document.getElementById("pickupDate").value = `${yyyy}-${mm}-${dd}`;
     };
 
-    // 渲染分類頁籤
     function renderTabs() {
       const tabsContainer = document.getElementById("categoryTabs");
       tabsContainer.innerHTML = "";
@@ -542,7 +535,6 @@
       });
     }
 
-    // 渲染品項
     function renderItems(category) {
       const itemsContainer = document.getElementById("itemsContainer");
       itemsContainer.innerHTML = "";
@@ -570,7 +562,6 @@
       });
     }
 
-    // 修改數量
     function changeQty(itemName, delta) {
       const currentQty = selectedCart[itemName] || 0;
       const newQty = currentQty + delta;
@@ -585,7 +576,6 @@
       calculateTotal();
     }
 
-    // 計算總金額與運費提示
     function calculateTotal() {
       let total = 0;
       
@@ -616,7 +606,6 @@
       }
     }
 
-    // 送出預約
     function submitOrder() {
       const name = document.getElementById("custName").value.trim();
       const phone = document.getElementById("custPhone").value.trim();
@@ -626,12 +615,12 @@
       const note = document.getElementById("orderNote").value.trim();
 
       if (!name || !phone || !address || !date || !time) {
-        showCustomModal("請完整填寫所有標示 * 的必填欄位！", false);
+        showCustomModal("請完整填寫所有標示 * 的必填欄位！");
         return;
       }
 
       if (Object.keys(selectedCart).length === 0) {
-        showCustomModal("請至少選擇一項送洗品項！", false);
+        showCustomModal("請至少選擇一項送洗品項！");
         return;
       }
 
@@ -642,71 +631,49 @@
       const itemsText = itemsArray.join("、");
       const totalText = document.getElementById("displayTotal").innerText;
 
-      // 背景發送給 Google 試算表
-      if (scriptURL && scriptURL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
-        const payload = {
-          name: name,
-          phone: phone,
-          address: address,
-          pickupDate: date,
-          pickupTime: time,
-          items: itemsText,
-          totalPrice: totalText,
-          note: note,
-          timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
-        };
-
+      // 發送資料至 Google Apps Script 試算表備份
+      if (scriptURL) {
         fetch(scriptURL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            name, phone, address, pickupDate: date, pickupTime: time,
+            items: itemsText, totalPrice: totalText, note,
+            timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
+          })
         });
       }
 
-      // 組合 LINE 訊息內容（格式與綠色對話框對齊）
-      const lineMessage = `------------------
-👤 姓名：${name}
-📞 電話：${phone}
-📍 地址：${address}
-📅 時間：${date} ${time}
-👕 品項：${itemsText}
-💵 預估金額：${totalText}
-📝 備註：${note || '無'}
-------------------
-已送出預約，請店家確認收件時間！`;
+      // 組合傳送訊息內容
+      const lineMessage = `------------------\n👤 姓名：${name}\n📞 電話：${phone}\n📍 地址：${address}\n📅 時間：${date} ${time}\n👕 品項：${itemsText}\n💵 預估金額：${totalText}\n📝 備註：${note || '無'}\n------------------\n已送出預約，請店家確認收件時間！`;
 
-      // 同時備份至剪貼簿（以防部分裝置限制自動帶入）
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(lineMessage);
+      // 利用 LIFF 在 LINE 聊天室自動代發訊息
+      if (liff.isInClient()) {
+        liff.sendMessages([
+          {
+            type: 'text',
+            text: lineMessage
+          }
+        ]).then(() => {
+          // 自動發送成功後，直接關閉 LIFF 網頁視窗
+          liff.closeWindow();
+        }).catch((err) => {
+          console.error("發送失敗:", err);
+          showCustomModal("訊息發送失敗，請確保是在 LINE App 內開啟並已授權發送訊息。");
+        });
       } else {
-        const textArea = document.createElement("textarea");
-        textArea.value = lineMessage;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textArea);
+        showCustomModal("預約資料已紀錄！請回到 LINE 聊天室與我們聯繫。");
       }
-
-      // 改用 LINE 分享 URI（可自動帶入文字至 LINE 對話框）
-      redirectUrl = `https://line.me/R/share?text=${encodeURIComponent(lineMessage)}`;
-
-      showCustomModal("預約資料已準備就緒！按下「確定」將開啟 LINE 並自動填入預約訊息，直接點擊傳送即可。", true);
     }
 
-    function showCustomModal(msg, hasRedirect) {
+    function showCustomModal(msg) {
       document.getElementById("customModalText").innerText = msg;
       document.getElementById("customModal").style.display = "flex";
-      if (!hasRedirect) {
-        redirectUrl = '';
-      }
     }
 
-    function closeModalAndRedirect() {
+    function closeModal() {
       document.getElementById("customModal").style.display = "none";
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
-      }
     }
   </script>
 </body>
