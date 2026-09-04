@@ -87,95 +87,75 @@
       font-size: 1rem;
     }
 
-    /* 頁籤 Tab 樣式 */
-    .category-tabs {
+    .item-add-box {
       display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
+      gap: 10px;
       margin-bottom: 15px;
-      -webkit-overflow-scrolling: touch;
     }
 
-    .category-tab {
-      background-color: #eef2f7;
-      color: #555;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.9rem;
+    .item-add-box select {
+      flex: 1;
+    }
+
+    .btn-add {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0 15px;
+      border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
       white-space: nowrap;
-      border: none;
-      transition: all 0.2s ease;
     }
 
-    .category-tab.active {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    /* 列表品項樣式 */
-    .item-list {
+    .selected-items-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      max-height: 400px;
-      overflow-y: auto;
-      padding-right: 5px;
+      gap: 8px;
     }
 
-    .item-row {
+    .selected-item-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #f0f0f0;
+      background: #f1f7fe;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #d0e2f7;
     }
 
-    .item-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .item-name {
+    .selected-item-info {
+      font-size: 0.95rem;
       font-weight: bold;
-      font-size: 1rem;
-      color: #333;
-    }
-
-    .item-price {
-      font-size: 0.85rem;
-      color: #777;
-      margin-top: 2px;
     }
 
     .quantity-control {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .btn-qty {
-      width: 32px;
-      height: 32px;
-      border: 1px solid #0056b3;
+      width: 28px;
+      height: 28px;
+      border: none;
       background-color: white;
       color: var(--primary-color);
-      font-size: 1.1rem;
       font-weight: bold;
       border-radius: 50%;
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
 
-    .qty-num {
-      font-weight: bold;
-      font-size: 1rem;
-      width: 16px;
-      text-align: center;
+    .btn-del {
+      background-color: #ff4d4f;
+      color: white;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 8px;
+      cursor: pointer;
     }
 
     .summary-card {
@@ -225,6 +205,13 @@
       background-color: #ccc;
       cursor: not-allowed;
     }
+
+    .empty-tip {
+      text-align: center;
+      color: #888;
+      font-size: 0.9rem;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
@@ -259,9 +246,18 @@
 
     <!-- 2. 洗滌品項選擇 -->
     <div class="section">
-      <div class="section-title">🧺 選擇送洗品項</div>
-      <div class="category-tabs" id="categoryTabs"></div>
-      <div class="item-list" id="itemList"></div>
+      <div class="section-title">2. 選擇洗滌品項（預估）</div>
+      
+      <div class="item-add-box">
+        <select id="itemSelect">
+          <option value="">-- 請選擇洗滌品項 --</option>
+        </select>
+        <button type="button" class="btn-add" onclick="addItem()">加入</button>
+      </div>
+
+      <div id="selectedItemsList" class="selected-items-list">
+        <div class="empty-tip">尚未選擇任何品項，請從上方下拉選單選擇後點擊「加入」</div>
+      </div>
     </div>
 
     <!-- 3. 預約時間與備註 -->
@@ -340,6 +336,21 @@
     { category: "一般衣服類", name: "浴袍", price: 200 },
     { category: "一般衣服類", name: "合成皮外套", price: 300 },
 
+    { category: "機能性品項類", name: "機能型外套", price: 400 },
+    { category: "機能性品項類", name: "GORE-TEX 衣服", price: 400 },
+    { category: "機能性品項類", name: "GORE-TEX 褲子", price: 400 },
+    { category: "機能性品項類", name: "雪衣", price: 600 },
+    { category: "機能性品項類", name: "連身雪衣", price: 1000 },
+    { category: "機能性品項類", name: "雪褲", price: 600 },
+    { category: "機能性品項類", name: "吊帶褲", price: 800 },
+    { category: "機能性品項類", name: "防寒手套", price: 300 },
+    { category: "機能性品項類", name: "GORE-TEX 撥水加工", price: 500 },
+    { category: "機能性品項類", name: "雪衣 撥水加工", price: 600 },
+    { category: "機能性品項類", name: "雪褲 撥水加工", price: 600 },
+    { category: "機能性品項類", name: "連身衣 撥水加工", price: 1000 },
+    { category: "機能性品項類", name: "吊帶褲 撥水加工", price: 600 },
+    { category: "機能性品項類", name: "防寒手套 撥水加工", price: 200 },
+
     { category: "裙褲類", name: "西褲", price: 100 },
     { category: "裙褲類", name: "女長褲", price: 100 },
     { category: "裙褲類", name: "牛仔褲", price: 150 },
@@ -355,21 +366,6 @@
     { category: "裙褲類", name: "百褶裙", price: 200 },
     { category: "裙褲類", name: "合成皮褲", price: 200 },
     { category: "裙褲類", name: "合成皮裙", price: 200 },
-
-    { category: "機能性品項類", name: "機能型外套", price: 400 },
-    { category: "機能性品項類", name: "GORE-TEX 衣服", price: 400 },
-    { category: "機能性品項類", name: "GORE-TEX 褲子", price: 400 },
-    { category: "機能性品項類", name: "雪衣", price: 600 },
-    { category: "機能性品項類", name: "連身雪衣", price: 1000 },
-    { category: "機能性品項類", name: "雪褲", price: 600 },
-    { category: "機能性品項類", name: "吊帶褲", price: 800 },
-    { category: "機能性品項類", name: "防寒手套", price: 300 },
-    { category: "機能性品項類", name: "GORE-TEX 撥水加工", price: 500 },
-    { category: "機能性品項類", name: "雪衣 撥水加工", price: 600 },
-    { category: "機能性品項類", name: "雪褲 撥水加工", price: 600 },
-    { category: "機能性品項類", name: "連身衣 撥水加工", price: 1000 },
-    { category: "機能性品項類", name: "吊帶褲 撥水加工", price: 600 },
-    { category: "機能性品項類", name: "防寒手套 撥水加工", price: 200 },
 
     { category: "禮服類", name: "兒童禮服", price: 200 },
     { category: "禮服類", name: "短禮服", price: 400 },
@@ -425,85 +421,121 @@
     { category: "特殊處理", name: "染色處理", price: "估價" }
   ];
 
-  let quantities = {};
-  let currentCategory = "一般衣服類";
-  const categories = [...new Set(priceData.map(item => item.category))];
+  // 紀錄使用者選取的品項數量：{ "西裝": 1, "襯衫": 2 }
+  let userCart = {};
 
-  function initUI() {
+  // 初始化選單
+  function initSelect() {
+    const select = document.getElementById('itemSelect');
+    let currentCategory = "";
+    let optgroup = null;
+
+    priceData.forEach((item, index) => {
+      if (item.category !== currentCategory) {
+        currentCategory = item.category;
+        optgroup = document.createElement('optgroup');
+        optgroup.label = currentCategory;
+        select.appendChild(optgroup);
+      }
+      
+      const option = document.createElement('option');
+      option.value = index;
+      const priceStr = typeof item.price === "number" ? `NT$ ${item.price} 元` : "需估價";
+      option.textContent = `${item.name} - ${priceStr}`;
+      optgroup.appendChild(option);
+    });
+
     document.getElementById('pickupDate').min = new Date().toISOString().split('T')[0];
-    priceData.forEach(item => {
-      quantities[item.name] = 0;
-    });
-    renderTabs();
-    renderItemList();
   }
 
-  function renderTabs() {
-    const tabsContainer = document.getElementById('categoryTabs');
-    tabsContainer.innerHTML = "";
-    categories.forEach(cat => {
-      const btn = document.createElement('button');
-      btn.type = "button";
-      btn.className = `category-tab ${cat === currentCategory ? 'active' : ''}`;
-      btn.innerText = cat;
-      btn.onclick = () => {
-        currentCategory = cat;
-        renderTabs();
-        renderItemList();
+  // 新增品項至購物車
+  function addItem() {
+    const select = document.getElementById('itemSelect');
+    const index = select.value;
+    if (index === "") return;
+
+    const item = priceData[index];
+    if (userCart[item.name]) {
+      userCart[item.name].qty += 1;
+    } else {
+      userCart[item.name] = {
+        price: item.price,
+        qty: 1
       };
-      tabsContainer.appendChild(btn);
-    });
+    }
+
+    select.value = "";
+    renderCart();
   }
 
-  function renderItemList() {
-    const listContainer = document.getElementById('itemList');
-    listContainer.innerHTML = "";
-    const filteredItems = priceData.filter(item => item.category === currentCategory);
-
-    filteredItems.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'item-row';
-      const priceStr = typeof item.price === "number" ? `NT$ ${item.price}` : "估價";
-
-      row.innerHTML = `
-        <div class="item-info">
-          <div class="item-name">${item.name}</div>
-          <div class="item-price">${priceStr}</div>
-        </div>
-        <div class="quantity-control">
-          <button type="button" class="btn-qty" onclick="changeQty('${item.name}', -1)">-</button>
-          <span class="qty-num">${quantities[item.name]}</span>
-          <button type="button" class="btn-qty" onclick="changeQty('${item.name}', 1)">+</button>
-        </div>
-      `;
-      listContainer.appendChild(row);
-    });
-  }
-
+  // 變更數量
   function changeQty(name, delta) {
-    if (quantities[name] + delta >= 0) {
-      quantities[name] += delta;
-      renderItemList();
-      calculateAll();
+    if (userCart[name]) {
+      userCart[name].qty += delta;
+      if (userCart[name].qty <= 0) {
+        delete userCart[name];
+      }
+      renderCart();
     }
   }
 
-  function calculateAll() {
+  // 刪除品項
+  function removeItem(name) {
+    delete userCart[name];
+    renderCart();
+  }
+
+  // 渲染已選品項與計算費用
+  function renderCart() {
+    const container = document.getElementById('selectedItemsList');
+    container.innerHTML = "";
+
+    const keys = Object.keys(userCart);
+    if (keys.length === 0) {
+      container.innerHTML = `<div class="empty-tip">尚未選擇任何品項，請從上方下拉選單選擇後點擊「加入」</div>`;
+      updateSummary(0, false);
+      return;
+    }
+
     let subtotal = 0;
     let hasEstimate = false;
 
-    priceData.forEach(item => {
-      const qty = quantities[item.name];
-      if (qty > 0) {
-        if (typeof item.price === "number") {
-          subtotal += item.price * qty;
-        } else {
-          hasEstimate = true;
-        }
+    keys.forEach(name => {
+      const item = userCart[name];
+      if (typeof item.price === "number") {
+        subtotal += item.price * item.qty;
+      } else {
+        hasEstimate = true;
       }
+
+      const row = document.createElement('div');
+      row.className = "selected-item-row";
+      const priceText = typeof item.price === "number" ? `NT$ ${item.price}` : "需估價";
+      
+      row.innerHTML = `
+        <div class="selected-item-info">
+          ${name} (${priceText})
+        </div>
+        <div class="quantity-control">
+          <button type="button" class="btn-qty" onclick="changeQty('${name}', -1)">-</button>
+          <span>${item.qty}</span>
+          <button type="button" class="btn-qty" onclick="changeQty('${name}', 1)">+</button>
+          <button type="button" class="btn-del" onclick="removeItem('${name}')">刪除</button>
+        </div>
+      `;
+      container.appendChild(row);
     });
 
-    let shipping = (subtotal > 0 && subtotal < 400) ? 100 : 0;
+    updateSummary(subtotal, hasEstimate);
+  }
+
+  // 更新總金額計算
+  function updateSummary(subtotal, hasEstimate) {
+    let shipping = 0;
+    if (subtotal > 0 && subtotal < 400) {
+      shipping = 100;
+    }
+
     const total = subtotal + shipping;
 
     const subText = hasEstimate ? `NT$ ${subtotal} + 估價項目` : `NT$ ${subtotal}`;
@@ -526,29 +558,17 @@
     const time = document.getElementById('pickupTime').value;
     const note = document.getElementById('note').value || "無";
 
+    const subtotalText = document.getElementById('subtotalText').innerText;
+    const shippingText = document.getElementById('shippingText').innerText;
+    const totalText = document.getElementById('totalText').innerText;
+
+    // 整理品項清單
     let itemsArr = [];
-    let subtotalNum = 0;
-    let hasEstimate = false;
-
-    priceData.forEach(item => {
-      const qty = quantities[item.name];
-      if (qty > 0) {
-        itemsArr.push(`${item.name} x ${qty}`);
-        if (typeof item.price === "number") {
-          subtotalNum += item.price * qty;
-        } else {
-          hasEstimate = true;
-        }
-      }
-    });
-
+    for (const name in userCart) {
+      itemsArr.push(`${name} x ${userCart[name].qty}`);
+    }
     const itemsString = itemsArr.length > 0 ? itemsArr.join(", ") : "未選擇預估品項";
-    
-    // 計算運費：未滿 400 為 100，滿 400 或 0 元時為 0
-    let shippingNum = (subtotalNum > 0 && subtotalNum < 400) ? 100 : 0;
-    let totalNum = subtotalNum + shippingNum;
 
-    // 傳送純數值給 Google 試算表
     const formData = {
       name: name,
       phone: phone,
@@ -556,12 +576,13 @@
       pickupDate: date,
       pickupTime: time,
       items: itemsString,
-      subtotal: subtotalNum,
-      shipping: shippingNum,
-      total: hasEstimate ? `${totalNum} (+估價)` : totalNum,
+      subtotal: subtotalText,
+      shipping: shippingText,
+      total: totalText,
       note: note
     };
 
+    // 1. 送出至 Google 試算表
     if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("你的SCRIPT_ID")) {
       fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
@@ -571,6 +592,7 @@
       }).catch(err => console.error("Google Sheet error:", err));
     }
 
+    // 2. 轉跳 LINE
     const lineMessage = `【明明專業洗衣 - 預約收送】\n` +
       `-------------------------\n` +
       `👤 姓名：${name}\n` +
@@ -578,7 +600,7 @@
       `📍 地址：${address}\n` +
       `📅 時間：${date} ${time}\n` +
       `👕 品項：${itemsString}\n` +
-      `💵 預估金額：NT$ ${totalNum} (運費 NT$ ${shippingNum})\n` +
+      `💵 預估金額：${totalText} (運費 ${shippingText})\n` +
       `📝 備註：${note}\n` +
       `-------------------------\n` +
       `已送出預約，請店家確認收件時間！`;
@@ -596,7 +618,8 @@
     }, 3000);
   }
 
-  window.onload = initUI;
+  // 網頁載入後初始化選單
+  window.onload = initSelect;
 </script>
 
 </body>
