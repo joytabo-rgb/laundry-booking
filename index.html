@@ -1,214 +1,259 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>明明專業洗衣 - 線上預約收送系統</title>
-<style>
-:root {
-  --primary-color: #0066cc;
-  --primary-light: #e6f0fa;
-  --text-color: #333333;
-  --bg-color: #f7f9fc;
-  --card-bg: #ffffff;
-  --border-color: #dddddd;
-  --success-color: #28a745;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>明明專業洗衣 - 線上送洗預約與估價</title>
+  <style>
+    :root {
+      --primary-color: #0056b3;
+      --secondary-color: #f8f9fa;
+      --accent-color: #d9534f;
+      --border-color: #dee2e6;
+    }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
 
-/* 確保電腦版與手機版網頁正常顯示上下滾動條 */
-html, body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  line-height: 1.6;
-  padding-bottom: 90px;
-  overflow-y: auto !important;
-}
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
 
-.header { 
-  background: linear-gradient(135deg, var(--primary-color), #004499); 
-  color: white; 
-  text-align: center; 
-  padding: 20px 15px; 
-  position: relative;
-  z-index: 1;
-}
-.header h1 { font-size: 22px; margin-bottom: 5px; }
-.header p { font-size: 13px; opacity: 0.9; }
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 25px;
+      border-bottom: 3px solid var(--primary-color);
+      padding-bottom: 10px;
+    }
 
-/* 修正告示欄 CSS：確保獨立呈現不被頂部 Header 遮擋 */
-.notice-bar { 
-  background-color: #fff3cd; 
-  color: #856404; 
-  padding: 10px; 
-  font-size: 13px; 
-  text-align: center; 
-  font-weight: bold; 
-  position: relative;
-  z-index: 2;
-  display: block !important;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ffeeba;
-}
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #495057;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--primary-color);
+      padding-left: 10px;
+    }
 
-.container { max-width: 600px; margin: 0 auto; padding: 0 15px; }
-.section-card { background-color: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.section-title { font-size: 16px; color: var(--primary-color); margin-bottom: 12px; border-left: 4px solid var(--primary-color); padding-left: 8px; font-weight: bold; }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
-.form-control { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
 
-/* 橫向滾動分類標籤（支援電腦版顯式 Scrollbar 與手機滑動） */
-.category-tab-container { 
-  display: flex; 
-  overflow-x: auto !important; 
-  gap: 8px; 
-  margin-bottom: 15px; 
-  padding-bottom: 10px; 
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) #f0f0f0;
-}
+    input[type="text"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
 
-.category-tab-container::-webkit-scrollbar { height: 8px; display: block !important; }
-.category-tab-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-.category-tab-container::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
 
-.category-tab { 
-  background-color: #eeeeee; 
-  padding: 8px 16px; 
-  border-radius: 20px; 
-  font-size: 13px; 
-  white-space: nowrap; 
-  cursor: pointer; 
-  border: none; 
-  font-weight: bold; 
-  color: #333; 
-  flex-shrink: 0;
-}
-.category-tab.active { background-color: var(--primary-color); color: white; }
+    .item-select-box {
+      background: var(--secondary-color);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
 
-.category-content { display: none; }
-.category-content.active { display: block; }
+    .btn-add {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 10px;
+    }
 
-.price-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f2f2f2; }
-.item-info { flex: 1; padding-right: 10px; }
-.item-name { font-weight: bold; font-size: 14px; color: #222; }
-.item-price { font-size: 12px; color: #666; margin-top: 2px; }
+    .btn-add:hover {
+      background-color: #004085;
+    }
 
-.quantity-control { display: flex; align-items: center; gap: 12px; }
-.btn-qty { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--primary-color); background-color: white; color: var(--primary-color); font-size: 18px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-.qty-val { font-weight: bold; min-width: 24px; text-align: center; font-size: 15px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
 
-/* 底部固定結帳欄 */
-.summary-bar { position: fixed; bottom: 0; left: 0; right: 0; background-color: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto; z-index: 100; }
-.total-price { font-size: 18px; font-weight: bold; color: #e4393c; }
-.shipping-note { font-size: 11px; color: #666; }
-.btn-submit { background-color: var(--success-color); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
-.btn-submit:disabled { background-color: #cccccc; cursor: not-allowed; }
-</style>
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: var(--secondary-color);
+    }
+
+    .btn-del {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .total-price-box {
+      text-align: right;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-top: 15px;
+      padding: 10px;
+      background: #fff0f0;
+      border-radius: 6px;
+    }
+
+    .btn-submit {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+      background-color: #218838;
+    }
+
+    .btn-submit:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-  <h1>明明專業洗衣</h1>
-  <p>專業、舒適、放心的到府收送線上預約服務</p>
-</div>
-
-<div class="notice-bar">
-  🚚 滿 NT$400 免運費，未滿酌收 NT$100。
-</div>
-
 <div class="container">
-  <form id="laundryForm" onsubmit="return false;">
-    
-    <div class="section-card">
-      <div class="section-title">👤 收送資訊</div>
+  <h1>明明專業洗衣 - 送洗預約單</h1>
+
+  <!-- 顧客基本資料 -->
+  <div class="section-title">顧客資訊</div>
+  <div class="grid-2">
+    <div class="form-group">
+      <label for="custName">姓名 *：</label>
+      <input type="text" id="custName" placeholder="請輸入姓名" required>
+    </div>
+    <div class="form-group">
+      <label for="custPhone">電話 *：</label>
+      <input type="tel" id="custPhone" placeholder="請輸入聯絡電話" required>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="custAddress">收送地址：</label>
+    <input type="text" id="custAddress" placeholder="請輸入完整收送地址">
+  </div>
+
+  <!-- 選擇品項區塊 -->
+  <div class="section-title">選擇送洗品項 (10大分類)</div>
+  <div class="item-select-box">
+    <div class="grid-2">
       <div class="form-group">
-        <label>姓名 *</label>
-        <input type="text" id="username" class="form-control" required placeholder="請輸入姓名">
-      </div>
-      <div class="form-group">
-        <label>聯絡電話 *</label>
-        <input type="tel" id="phone" class="form-control" required placeholder="請輸入手機號碼">
-      </div>
-      <div class="form-group">
-        <label>收送地址 *</label>
-        <input type="text" id="address" class="form-control" required placeholder="請輸入完整地址">
-      </div>
-      <div class="form-group">
-        <label>預期取件日期 *</label>
-        <input type="date" id="pickupDate" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label>預期取件時段 *</label>
-        <select id="pickupTime" class="form-control" required>
-          <option value="">請選擇取件時段...</option>
-          <option value="11:00 ～ 13:00">11:00 ～ 13:00</option>
-          <option value="13:00 ～ 15:00">13:00 ～ 15:00</option>
-          <option value="15:00 ～ 17:00">15:00 ～ 17:00</option>
+        <label for="categorySelect">選擇類別：</label>
+        <select id="categorySelect" onchange="onCategoryChange()">
+          <option value="">-- 請選擇類別 --</option>
         </select>
       </div>
+
       <div class="form-group">
-        <label>備註事項</label>
-        <input type="text" id="note" class="form-control" placeholder="特殊洗滌需求或管理室代收等">
+        <label for="itemSelect">選擇品項：</label>
+        <select id="itemSelect" disabled>
+          <option value="">-- 請先選擇類別 --</option>
+        </select>
       </div>
     </div>
 
-    <div class="section-card">
-      <div class="section-title">🧺 選擇送洗品項</div>
-      
-      <div class="category-tab-container">
-        <button type="button" class="category-tab active" onclick="switchTab(0)">一般衣服類</button>
-        <button type="button" class="category-tab" onclick="switchTab(1)">機能性品項類</button>
-        <button type="button" class="category-tab" onclick="switchTab(2)">裙褲類</button>
-        <button type="button" class="category-tab" onclick="switchTab(3)">禮服類</button>
-        <button type="button" class="category-tab" onclick="switchTab(4)">寢具用品類</button>
-        <button type="button" class="category-tab" onclick="switchTab(5)">沙發用品類</button>
-        <button type="button" class="category-tab" onclick="switchTab(6)">玩偶類</button>
-        <button type="button" class="category-tab" onclick="switchTab(7)">小件類</button>
-        <button type="button" class="category-tab" onclick="switchTab(8)">其他類</button>
-        <button type="button" class="category-tab" onclick="switchTab(9)">特殊類</button>
-        <button type="button" class="category-tab" onclick="switchTab(10)">自訂備註需求</button>
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="itemQty">數量：</label>
+        <input type="number" id="itemQty" value="1" min="1">
       </div>
-
-      <div class="item-list">
-        <div id="panel-tab0" class="category-content active"></div>
-        <div id="panel-tab1" class="category-content"></div>
-        <div id="panel-tab2" class="category-content"></div>
-        <div id="panel-tab3" class="category-content"></div>
-        <div id="panel-tab4" class="category-content"></div>
-        <div id="panel-tab5" class="category-content"></div>
-        <div id="panel-tab6" class="category-content"></div>
-        <div id="panel-tab7" class="category-content"></div>
-        <div id="panel-tab8" class="category-content"></div>
-        <div id="panel-tab9" class="category-content"></div>
-        <div id="panel-tab10" class="category-content">
-          <div style="padding: 15px 5px; color: #555; font-size: 13px;">
-            若您的物品未包含在上述選單中，或有特殊污漬處理需求，請於上方「備註事項」填寫說明，我們將由專人與您聯繫估價。
-          </div>
-        </div>
+      <div class="form-group" style="display: flex; align-items: flex-end;">
+        <button class="btn-add" onclick="addItem()">加入送洗清單</button>
       </div>
     </div>
-
-  </form>
-</div>
-
-<div class="summary-bar">
-  <div>
-    <div class="total-price" id="totalPrice">NT$ 0</div>
-    <div class="shipping-note" id="shippingNote">未滿 NT$400 運費 NT$100</div>
   </div>
-  <button type="button" class="btn-submit" id="submitBtn" onclick="submitForm()">送出預約並開啟 LINE</button>
+
+  <!-- 已加入的送洗明細 -->
+  <div class="section-title">送洗明細</div>
+  <table>
+    <thead>
+      <tr>
+        <th>類別</th>
+        <th>品項名稱</th>
+        <th>單價</th>
+        <th>數量</th>
+        <th>小計</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody id="cartTableBody">
+      <tr>
+        <td colspan="6" style="color: #6c757d;">目前尚未加入任何品項</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div id="totalDisplay" class="total-price-box">
+    預估總金額：$0 元
+  </div>
+
+  <div class="form-group" style="margin-top: 15px;">
+    <label for="orderNote">特別指示/備註（如污漬位置、特殊需求）：</label>
+    <textarea id="orderNote" rows="3" placeholder="如有特殊狀況請在此註記"></textarea>
+  </div>
+
+  <button class="btn-submit" id="submitBtn" onclick="submitOrder()">送出預約單 (連動試算表與LINE)</button>
 </div>
 
 <script>
-  // 價目表資料定義
-  const allCategoriesData = [
-    // 0: 一般衣服類
-    [
+  // ⚠️ 請填入您的 Google Apps Script Web App URL 網址
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzgJtCLPCNK_c8m7Xs1h1pmV4euFPMQi-NmG9M4XWo-eJr4F98jHRsdsunC9BvC6B4KMg/execL';
+
+  // 明明專業洗衣 10 大分類完整價目表
+  const priceList = {
+    "一般衣服類": [
       { name: "西裝", price: 150 }, { name: "襯衫", price: 60 }, { name: "T SHIRT", price: 80 },
       { name: "POLO衫", price: 100 }, { name: "上衣", price: 120 }, { name: "運動衫", price: 100 },
       { name: "夾克", price: 180 }, { name: "短外套", price: 180 }, { name: "大衣", price: 300 },
@@ -216,212 +261,224 @@ html, body {
       { name: "旗袍", price: 250 }, { name: "棉襖", price: 250 }, { name: "毛衣", price: 150 },
       { name: "毛料背心", price: 150 }, { name: "薄背心", price: 120 }, { name: "刷毛背心", price: 150 },
       { name: "鋪棉背心", price: 180 }, { name: "羽絨背心", price: 250 }, { name: "輕羽絨衣", price: 250 },
-      { name: "羽絨衣", price: 300 }, { name: "羽絨中長", price: 350 }, { name: "羽絨大衣", price: 450 },
+      { name: "羽絨衣", price: 300 }, { name: "羽絨衣中長", price: 350 }, { name: "羽絨大衣", price: 450 },
       { name: "睡袍", price: 200 }, { name: "浴袍", price: 200 }, { name: "合成皮外套", price: 300 }
     ],
-    // 1: 機能性品項類
-    [
+    "機能性品項類": [
       { name: "機能型外套", price: 400 }, { name: "GORE-TEX 衣服", price: 400 }, { name: "GORE-TEX 褲子", price: 400 },
       { name: "雪衣", price: 600 }, { name: "連身雪衣", price: 1000 }, { name: "雪褲", price: 600 },
       { name: "吊帶褲", price: 800 }, { name: "防寒手套", price: 300 }, { name: "GORE-TEX 撥水加工", price: 500 },
       { name: "雪衣 撥水加工", price: 600 }, { name: "雪褲 撥水加工", price: 600 }, { name: "連身衣 撥水加工", price: 1000 },
       { name: "吊帶褲 撥水加工", price: 600 }, { name: "防寒手套 撥水加工", price: 200 }
     ],
-    // 2: 裙褲類
-    [
+    "裙褲類": [
       { name: "西褲", price: 100 }, { name: "女長褲", price: 100 }, { name: "牛仔褲", price: 150 },
       { name: "休閒褲", price: 120 }, { name: "運動褲", price: 100 }, { name: "短褲", price: 80 },
       { name: "短裙", price: 80 }, { name: "褲裙", price: 100 }, { name: "長裙", price: 150 },
-      { name: "毛裙", price: 180 }, { name: "絲絨裙", price: 200 }, { name: "半褶裙", price: 150 },
-      { name: "百褶裙", price: 200 }, { name: "合成皮褲", price: 200 }, { name: "合成皮裙", price: 200 }
+      { name: "毛裙", price: 180 }, { name: "絲絨裙", price: 200 }, { name: "半摺裙", price: 150 },
+      { name: "百摺裙", price: 200 }, { name: "合成皮褲", price: 200 }, { name: "合成皮裙", price: 200 }
     ],
-    // 3: 禮服類
-    [
+    "禮服類": [
       { name: "兒童禮服", price: 200 }, { name: "短禮服", price: 400 },
       { name: "長禮服", price: 700 }, { name: "新娘禮服", price: 1500 }
     ],
-    // 4: 寢具用品類
-    [
+    "寢具用品類": [
       { name: "枕頭套", price: 80 }, { name: "抱枕套", price: 80 }, { name: "抱枕", price: 120 },
       { name: "枕頭芯", price: 400 }, { name: "床單薄", price: 160 }, { name: "床單厚", price: 200 },
       { name: "被套薄", price: 160 }, { name: "被套厚", price: 200 }, { name: "保潔墊", price: 170 },
       { name: "涼被", price: 400 }, { name: "棉被單人", price: 500 }, { name: "棉被雙人", price: 700 },
-      { name: "毛絨被", price: 400 }, { name: "毛毯", price: 500 }, { name: "羽絨被", price: 700 },
-      { name: "羊毛被", price: 700 }, { name: "蠶絲被", price: 700 }, { name: "睡袋", price: 500 },
-      { name: "腳踏墊", price: 150 }
+      { name: "毛絨被", price: 400 }, { name: "毛毯", price: 500 }, { name: "羽絨", price: 700 },
+      { name: "羊毛", price: 700 }, { name: "蠶絲被", price: 700 }, { name: "睡袋", price: 500 }, { name: "腳踏墊", price: 150 }
     ],
-    // 5: 沙發用品類
-    [
+    "沙發用品類": [
       { name: "單人沙發套", price: 150 }, { name: "雙人沙發套", price: 300 },
       { name: "三人沙發套", price: 400 }, { name: "桌巾", price: 150 }
     ],
-    // 6: 玩偶類
-    [
+    "玩偶類": [
       { name: "毛絨玩偶長度30公分", price: 150 }, { name: "毛絨小型玩偶60公分", price: 250 },
       { name: "毛絨中型玩偶90公分", price: 400 }, { name: "毛絨大型玩偶120公分", price: 500 }
     ],
-    // 7: 小件類
-    [
+    "小件類": [
       { name: "領帶", price: 80 }, { name: "手套", price: 80 }, { name: "絲巾", price: 150 },
       { name: "圍巾薄", price: 200 }, { name: "圍巾厚", price: 300 }, { name: "披肩", price: 300 },
       { name: "棒球帽", price: 150 }, { name: "毛帽", price: 150 }
     ],
-    // 8: 其他類
-    [
-      { name: "窗簾120公分(摺)", price: 80 }, { name: "窗簾180公分(摺)", price: 100 }, { name: "窗簾210公分(摺)", price: 120 },
-      { name: "地毯", price: "估價" }, { name: "各式包包清洗", price: "估價" }
+    "其他類": [
+      { name: "窗簾120公分(摺)", price: 80 }, { name: "窗簾180公分(摺)", price: 100 },
+      { name: "窗簾210公分(摺)", price: 120 }, { name: "地毯", price: "估價" },
+      { name: "各式包包清洗", price: "估價" }
     ],
-    // 9: 特殊類
-    [
+    "特殊類": [
       { name: "黃斑特殊處理", price: "估價" }, { name: "染色處理", price: "估價" }
     ]
-  ];
-
-  let items = {};
-
-  // 動態渲染所有品項
-  window.onload = function() {
-    allCategoriesData.forEach((catItems, catIndex) => {
-      const panel = document.getElementById(`panel-tab${catIndex}`);
-      if (!panel) return;
-      let html = '';
-      catItems.forEach(item => {
-        const key = item.name.replace(/ /g, '_').replace(/\(/g, '').replace(/\)/g, '');
-        const priceText = typeof item.price === 'number' ? `NT$ ${item.price} 元` : item.price;
-        html += `
-          <div class="price-item">
-            <div class="item-info">
-              <div class="item-name">${item.name}</div>
-              <div class="item-price">${priceText}</div>
-            </div>
-            <div class="quantity-control">
-              <button type="button" class="btn-qty" onclick="changeQty('${key}', ${typeof item.price === 'number' ? item.price : 0}, -1)">-</button>
-              <span class="qty-val" id="qty_${key}">0</span>
-              <button type="button" class="btn-qty" onclick="changeQty('${key}', ${typeof item.price === 'number' ? item.price : 0}, 1)">+</button>
-            </div>
-          </div>
-        `;
-      });
-      panel.innerHTML = html;
-    });
   };
 
-  function switchTab(index) {
-    const tabs = document.querySelectorAll('.category-tab');
-    const panels = document.querySelectorAll('.category-content');
-    tabs.forEach((tab, i) => tab.classList.toggle('active', i === index));
-    panels.forEach((panel, i) => panel.classList.toggle('active', i === index));
-  }
+  let cart = [];
 
-  function changeQty(name, price, delta) {
-    if (!items[name]) items[name] = { price: price, qty: 0 };
-    items[name].qty = Math.max(0, items[name].qty + delta);
-    document.getElementById('qty_' + name).innerText = items[name].qty;
-    updateTotal();
-  }
-
-  function updateTotal() {
-    let subtotal = 0;
-    for (let key in items) {
-      subtotal += items[key].price * items[key].qty;
+  window.onload = function() {
+    const categorySelect = document.getElementById("categorySelect");
+    for (let cat in priceList) {
+      let opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      categorySelect.appendChild(opt);
     }
-    let shipping = (subtotal === 0 || subtotal >= 400) ? 0 : 100;
-    let grandTotal = subtotal + shipping;
+  };
 
-    document.getElementById('totalPrice').innerText = 'NT$ ' + grandTotal;
-    if (subtotal === 0) {
-      document.getElementById('shippingNote').innerText = '滿 NT$400 免運費';
-    } else if (subtotal < 400) {
-      document.getElementById('shippingNote').innerText = '運費 NT$100 (還差 NT$' + (400 - subtotal) + ' 免運)';
+  function onCategoryChange() {
+    const categorySelect = document.getElementById("categorySelect").value;
+    const itemSelect = document.getElementById("itemSelect");
+
+    itemSelect.innerHTML = '<option value="">-- 請選擇品項 --</option>';
+
+    if (categorySelect && priceList[categorySelect]) {
+      itemSelect.disabled = false;
+      priceList[categorySelect].forEach((item, index) => {
+        let opt = document.createElement("option");
+        opt.value = index;
+        opt.textContent = item.price === "估價" ? `${item.name} (另行估價)` : `${item.name} ($${item.price})`;
+        itemSelect.appendChild(opt);
+      });
     } else {
-      document.getElementById('shippingNote').innerText = '符合免運門檻！';
+      itemSelect.disabled = true;
     }
   }
 
- function submitForm() {
-    var name = document.getElementById('username').value.trim();
-    var phone = document.getElementById('phone').value.trim();
-    var address = document.getElementById('address').value.trim();
-    var pickupDate = document.getElementById('pickupDate').value;
-    var pickupTime = document.getElementById('pickupTime').value;
-    var note = document.getElementById('note').value.trim();
+  function addItem() {
+    const categoryVal = document.getElementById("categorySelect").value;
+    const itemIdx = document.getElementById("itemSelect").value;
+    const qty = parseInt(document.getElementById("itemQty").value) || 1;
 
-    if (!name || !phone || !address || !pickupDate || !pickupTime) {
-      alert('請填寫完整的收送資訊與預約時間！');
+    if (!categoryVal || itemIdx === "") {
+      alert("請選擇類別與品項！");
       return;
     }
 
-    let subtotal = 0;
-    let selectedList = [];
-    for (let key in items) {
-      if (items[key].qty > 0) {
-        subtotal += items[key].price * items[key].qty;
-        selectedList.push(`• ${key.replace(/_/g, ' ')} x ${items[key].qty}`);
+    const itemObj = priceList[categoryVal][itemIdx];
+    
+    cart.push({
+      category: categoryVal,
+      name: itemObj.name,
+      price: itemObj.price,
+      qty: qty
+    });
+
+    renderCart();
+  }
+
+  function deleteItem(index) {
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart() {
+    const tbody = document.getElementById("cartTableBody");
+    tbody.innerHTML = "";
+
+    if (cart.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="color: #6c757d;">目前尚未加入任何品項</td></tr>';
+      document.getElementById("totalDisplay").innerText = "預估總金額：$0 元";
+      return;
+    }
+
+    let total = 0;
+    let hasQuoteItem = false;
+
+    cart.forEach((item, index) => {
+      let tr = document.createElement("tr");
+      let subtotalStr = "";
+
+      if (item.price === "估價") {
+        subtotalStr = "另行估價";
+        hasQuoteItem = true;
+      } else {
+        let subtotal = item.price * item.qty;
+        total += subtotal;
+        subtotalStr = `$${subtotal}`;
       }
-    }
 
-    if (selectedList.length === 0 && !note) {
-      alert('請至少選擇一項送洗品項或填寫備註說明需求！');
+      tr.innerHTML = `
+        <td>${item.category}</td>
+        <td>${item.name}</td>
+        <td>${item.price === "估價" ? "另行估價" : "$" + item.price}</td>
+        <td>${item.qty}</td>
+        <td>${subtotalStr}</td>
+        <td><button class="btn-del" onclick="deleteItem(${index})">刪除</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    let totalText = `預估總金額：$${total} 元`;
+    if (hasQuoteItem) {
+      totalText += " （包含另行估價品項）";
+    }
+    document.getElementById("totalDisplay").innerText = totalText;
+  }
+
+  // 送出預約單並發送至 Google Apps Script (對接 Google 試算表 & LINE)
+  function submitOrder() {
+    const name = document.getElementById("custName").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    const address = document.getElementById("custAddress").value.trim();
+    const note = document.getElementById("orderNote").value.trim();
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (!name || !phone) {
+      alert("請填寫姓名與電話！");
       return;
     }
 
-    let shipping = subtotal >= 400 ? 0 : 100;
-    let total = subtotal + shipping;
+    if (cart.length === 0) {
+      alert("請至少選擇一項送洗品項！");
+      return;
+    }
 
-    var submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.innerText = '處理中...';
+    // 格式化送洗明細字串
+    let itemsDetail = cart.map(item => `${item.name} x${item.qty} (${item.price === '估價' ? '估價' : '$' + item.price})`).join('; ');
+    let totalText = document.getElementById("totalDisplay").innerText;
 
-    var formData = {
+    const payload = {
       name: name,
       phone: phone,
       address: address,
-      pickupDate: pickupDate,
-      pickupTime: pickupTime,
-      subtotal: subtotal,
-      shipping: shipping,
-      total: total,
+      items: itemsDetail,
+      totalPrice: totalText,
       note: note,
-      items: selectedList.length > 0 ? selectedList.join(', ') : '自訂備註需求'
+      timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
     };
 
-    var GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL";
+    submitBtn.disabled = true;
+    submitBtn.innerText = "資料傳送中...";
 
-    // 同步寫入 Google 試算表
-    fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    }).then(function() {
-      var lineMsg = "【明明專業洗衣 - 線上預約】\n" +
-        "------------------\n" +
-        "👤 姓名：" + formData.name + "\n" +
-        "📞 電話：" + formData.phone + "\n" +
-        "📍 地址：" + formData.address + "\n" +
-        "📅 時間：" + formData.pickupDate + " " + formData.pickupTime + "\n" +
-        "🧺 送洗品項：\n" + (selectedList.length > 0 ? selectedList.join("\n") : "（詳見備註說明）") + "\n\n" +
-        "💰 費用試算：\n" +
-        "• 小計：" + formData.subtotal + "\n" +
-        "• 運費：" + formData.shipping + "\n" +
-        "• 預估總金額：" + formData.total + "\n" +
-        "📝 備註：" + formData.note + "\n" +
-        "------------------\n" +
-        "預約已送出，請等待店家專人確認！";
-
-      // 僅顯示「預約成功」
-      alert("預約成功");
-
-      // 正確的 LINE 官方帳號訊息跳轉連結 (請確定 LINE ID 為 @654mkark)
-      var LINE_ID = "@654mkark"; 
-      var lineUrl = "https://line.me/R/oaMessage/" + encodeURIComponent(LINE_ID) + "/?" + encodeURIComponent(lineMsg);
-
-      window.location.href = lineUrl;
-    }).catch(function(err) {
-      alert("傳送失敗，請稍後再試。");
+    // 使用 fetch 發送資料至 Google Apps Script
+    fetch(scriptURL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      alert("預約成功！明明專業洗衣已收到您的送洗單，資料已寫入試算表並推播通知，我們將儘快與您聯繫！");
+      // 清空表單與購物車
+      cart = [];
+      renderCart();
+      document.getElementById("custName").value = "";
+      document.getElementById("custPhone").value = "";
+      document.getElementById("custAddress").value = "";
+      document.getElementById("orderNote").value = "";
       submitBtn.disabled = false;
-      submitBtn.innerText = '送出預約並開啟 LINE';
+      submitBtn.innerText = "送出預約單 (連動試算表與LINE)";
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert("傳送失敗，請稍後再試或直接電話聯繫！");
+      submitBtn.disabled = false;
+      submitBtn.innerText = "送出預約單 (連動試算表與LINE)";
     });
   }
+</script>
+
 </body>
 </html>
