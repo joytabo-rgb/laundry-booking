@@ -87,7 +87,7 @@
       font-size: 1rem;
     }
 
-    /* 頁籤 Tab 樣式 (符合附件照片) */
+    /* 頁籤 Tab 樣式 */
     .category-tabs {
       display: flex;
       gap: 8px;
@@ -115,7 +115,7 @@
       color: white;
     }
 
-    /* 列表品項樣式 (符合附件照片) */
+    /* 列表品項樣式 */
     .item-list {
       display: flex;
       flex-direction: column;
@@ -257,14 +257,10 @@
       </div>
     </div>
 
-    <!-- 2. 洗滌品項選擇 (依照附件照片設計) -->
+    <!-- 2. 洗滌品項選擇 -->
     <div class="section">
       <div class="section-title">🧺 選擇送洗品項</div>
-      
-      <!-- 分類頁籤 -->
       <div class="category-tabs" id="categoryTabs"></div>
-
-      <!-- 品項列表 -->
       <div class="item-list" id="itemList"></div>
     </div>
 
@@ -311,7 +307,7 @@
 </div>
 
 <script>
-  const GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbwePxEB3TvmFJL8iUb1K9dR7npCw24yP4EjHOWCEHDH7J9SImPPBSDw-wtwCLBTh2wy4g/exec"";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwePxEB3TvmFJL8iUb1K9dR7npCw24yP4EjHOWCEHDH7J9SImPPBSDw-wtwCLBTh2wy4g/execc";
   const LINE_OFFICIAL_ID = "@854mkark"; 
 
   // 完整價目表資料
@@ -429,30 +425,22 @@
     { category: "特殊處理", name: "染色處理", price: "估價" }
   ];
 
-  // 紀錄選擇的品項數量 { "西裝": 1, "襯衫": 2 }
   let quantities = {};
   let currentCategory = "一般衣服類";
-
-  // 取得所有不重複分類
   const categories = [...new Set(priceData.map(item => item.category))];
 
   function initUI() {
     document.getElementById('pickupDate').min = new Date().toISOString().split('T')[0];
-    
-    // 初始化數量紀錄
     priceData.forEach(item => {
       quantities[item.name] = 0;
     });
-
     renderTabs();
     renderItemList();
   }
 
-  // 渲染頁籤
   function renderTabs() {
     const tabsContainer = document.getElementById('categoryTabs');
     tabsContainer.innerHTML = "";
-
     categories.forEach(cat => {
       const btn = document.createElement('button');
       btn.type = "button";
@@ -467,17 +455,14 @@
     });
   }
 
-  // 渲染當前分類的品項列表
   function renderItemList() {
     const listContainer = document.getElementById('itemList');
     listContainer.innerHTML = "";
-
     const filteredItems = priceData.filter(item => item.category === currentCategory);
 
     filteredItems.forEach(item => {
       const row = document.createElement('div');
       row.className = 'item-row';
-
       const priceStr = typeof item.price === "number" ? `NT$ ${item.price}` : "估價";
 
       row.innerHTML = `
@@ -495,7 +480,6 @@
     });
   }
 
-  // 變更數量
   function changeQty(name, delta) {
     if (quantities[name] + delta >= 0) {
       quantities[name] += delta;
@@ -504,16 +488,13 @@
     }
   }
 
-  // 計算金額與運費
   function calculateAll() {
     let subtotal = 0;
     let hasEstimate = false;
-    let hasSelectedItems = false;
 
     priceData.forEach(item => {
       const qty = quantities[item.name];
       if (qty > 0) {
-        hasSelectedItems = true;
         if (typeof item.price === "number") {
           subtotal += item.price * qty;
         } else {
@@ -534,89 +515,86 @@
   }
 
   function submitBooking() {
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.innerText = "預約處理中...";
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = "預約處理中...";
 
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  const address = document.getElementById('address').value;
-  const date = document.getElementById('pickupDate').value;
-  const time = document.getElementById('pickupTime').value;
-  const note = document.getElementById('note').value || "無";
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const date = document.getElementById('pickupDate').value;
+    const time = document.getElementById('pickupTime').value;
+    const note = document.getElementById('note').value || "無";
 
-  // 整理選取的品項
-  let itemsArr = [];
-  let subtotalNum = 0;
-  let hasEstimate = false;
+    let itemsArr = [];
+    let subtotalNum = 0;
+    let hasEstimate = false;
 
-  priceData.forEach(item => {
-    const qty = quantities[item.name];
-    if (qty > 0) {
-      itemsArr.push(`${item.name} x ${qty}`);
-      if (typeof item.price === "number") {
-        subtotalNum += item.price * qty;
-      } else {
-        hasEstimate = true;
+    priceData.forEach(item => {
+      const qty = quantities[item.name];
+      if (qty > 0) {
+        itemsArr.push(`${item.name} x ${qty}`);
+        if (typeof item.price === "number") {
+          subtotalNum += item.price * qty;
+        } else {
+          hasEstimate = true;
+        }
       }
+    });
+
+    const itemsString = itemsArr.length > 0 ? itemsArr.join(", ") : "未選擇預估品項";
+    
+    // 計算運費：未滿 400 為 100，滿 400 或 0 元時為 0
+    let shippingNum = (subtotalNum > 0 && subtotalNum < 400) ? 100 : 0;
+    let totalNum = subtotalNum + shippingNum;
+
+    // 傳送純數值給 Google 試算表
+    const formData = {
+      name: name,
+      phone: phone,
+      address: address,
+      pickupDate: date,
+      pickupTime: time,
+      items: itemsString,
+      subtotal: subtotalNum,
+      shipping: shippingNum,
+      total: hasEstimate ? `${totalNum} (+估價)` : totalNum,
+      note: note
+    };
+
+    if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("你的SCRIPT_ID")) {
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      }).catch(err => console.error("Google Sheet error:", err));
     }
-  });
 
-  const itemsString = itemsArr.length > 0 ? itemsArr.join(", ") : "未選擇預估品項";
-  
-  // 計算運費 (未滿 400 為 100，滿 400 或 0 元為 0)
-  let shippingNum = (subtotalNum > 0 && subtotalNum < 400) ? 100 : 0;
-  let totalNum = subtotalNum + shippingNum;
+    const lineMessage = `【明明專業洗衣 - 預約收送】\n` +
+      `-------------------------\n` +
+      `👤 姓名：${name}\n` +
+      `📞 電話：${phone}\n` +
+      `📍 地址：${address}\n` +
+      `📅 時間：${date} ${time}\n` +
+      `👕 品項：${itemsString}\n` +
+      `💵 預估金額：NT$ ${totalNum} (運費 NT$ ${shippingNum})\n` +
+      `📝 備註：${note}\n` +
+      `-------------------------\n` +
+      `已送出預約，請店家確認收件時間！`;
 
-  // 打包傳給 Google 試算表的資料 (傳送純數字)
-  const formData = {
-    name: name,
-    phone: phone,
-    address: address,
-    pickupDate: date,
-    pickupTime: time,
-    items: itemsString,
-    subtotal: subtotalNum,            // 純數字，例: 1820
-    shipping: shippingNum,            // 純數字，免運即為 0
-    total: hasEstimate ? `NT$ ${totalNum} + 估價` : totalNum, // 預估總金額
-    note: note
-  };
+    const encodedMsg = encodeURIComponent(lineMessage);
+    const lineUrl = `https://line.me/R/oaMessage/${LINE_OFFICIAL_ID}/?${encodedMsg}`;
 
-  // 1. 送至 Google 試算表
-  if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("你的SCRIPT_ID")) {
-    fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    }).catch(err => console.error("Google Sheet error:", err));
+    alert("預約成功！按「確定」將會自動跳轉至 LINE，請直接點擊「發送」將訊息傳給店家！");
+    
+    window.location.href = lineUrl;
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerText = "確認預約並發送 LINE 訊息";
+    }, 3000);
   }
-
-  // 2. LINE 訊息保持完整可讀格式
-  const lineMessage = `【明明專業洗衣 - 預約收送】\n` +
-    `-------------------------\n` +
-    `👤 姓名：${name}\n` +
-    `📞 電話：${phone}\n` +
-    `📍 地址：${address}\n` +
-    `📅 時間：${date} ${time}\n` +
-    `👕 品項：${itemsString}\n` +
-    `💵 預估金額：NT$ ${totalNum} (運費 NT$ ${shippingNum})\n` +
-    `📝 備註：${note}\n` +
-    `-------------------------\n` +
-    `已送出預約，請店家確認收件時間！`;
-
-  const encodedMsg = encodeURIComponent(lineMessage);
-  const lineUrl = `https://line.me/R/oaMessage/${LINE_OFFICIAL_ID}/?${encodedMsg}`;
-
-  alert("預約成功！按「確定」將會自動跳轉至 LINE，請直接點擊「發送」將訊息傳給店家！");
-  
-  window.location.href = lineUrl;
-
-  setTimeout(() => {
-    btn.disabled = false;
-    btn.innerText = "確認預約並發送 LINE 訊息";
-  }, 3000);
-}
 
   window.onload = initUI;
 </script>
