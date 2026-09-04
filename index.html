@@ -363,132 +363,68 @@
   </div>
 
   <script>
-    // 代入您的 LIFF ID
     const MY_LIFF_ID = "2011400784-69V5deMW";
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzAkz91FW9DmyG1HzkmthUKTfVOn625uB3Ublukpro0Whs1WKCaZwdcWczPFhdqmVOyjQ/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz7xzVhXK4CGSK27pOeFBqQvKOT-whG6XcR54TiSip9llBwsJuzrT-_ko925Te_pO7wqg/exec";
 
     const laundryData = {
       "一般衣服類": [
-        { name: "西裝", price: 150 },
-        { name: "襯衫", price: 60 },
-        { name: "T SHIRT", price: 80 },
-        { name: "POLO衫", price: 100 },
-        { name: "上衣", price: 120 },
-        { name: "運動衫", price: 100 },
-        { name: "夾克", price: 180 },
-        { name: "短外套", price: 180 },
-        { name: "大衣", price: 300 },
-        { name: "風衣", price: 400 },
-        { name: "洋裝", price: 180 },
-        { name: "連身服", price: 200 },
-        { name: "旗袍", price: 250 },
-        { name: "棉襖", price: 250 },
-        { name: "毛衣", price: 150 },
-        { name: "毛料背心", price: 150 },
-        { name: "薄背心", price: 120 },
-        { name: "刷毛背心", price: 150 },
-        { name: "鋪棉背心", price: 180 },
-        { name: "羽絨背心", price: 250 },
-        { name: "輕羽絨衣", price: 250 },
-        { name: "羽絨衣", price: 300 },
-        { name: "羽絨中長", price: 350 },
-        { name: "羽絨大衣", price: 450 },
-        { name: "睡袍", price: 200 },
-        { name: "浴袍", price: 200 },
-        { name: "合成皮外套", price: 300 }
+        { name: "西裝", price: 150 }, { name: "襯衫", price: 60 }, { name: "T SHIRT", price: 80 },
+        { name: "POLO衫", price: 100 }, { name: "上衣", price: 120 }, { name: "運動衫", price: 100 },
+        { name: "夾克", price: 180 }, { name: "短外套", price: 180 }, { name: "大衣", price: 300 },
+        { name: "風衣", price: 400 }, { name: "洋裝", price: 180 }, { name: "連身服", price: 200 },
+        { name: "旗袍", price: 250 }, { name: "棉襖", price: 250 }, { name: "毛衣", price: 150 },
+        { name: "毛料背心", price: 150 }, { name: "薄背心", price: 120 }, { name: "刷毛背心", price: 150 },
+        { name: "鋪棉背心", price: 180 }, { name: "羽絨背心", price: 250 }, { name: "輕羽絨衣", price: 250 },
+        { name: "羽絨衣", price: 300 }, { name: "羽絨中長", price: 350 }, { name: "羽絨大衣", price: 450 },
+        { name: "睡袍", price: 200 }, { name: "浴袍", price: 200 }, { name: "合成皮外套", price: 300 }
       ],
       "機能性品項類": [
-        { name: "機能型外套", price: 400 },
-        { name: "GORE-TEX 衣服", price: 400 },
-        { name: "GORE-TEX 褲子", price: 400 },
-        { name: "雪衣", price: 600 },
-        { name: "連身衣", price: 1000 },
-        { name: "雪褲", price: 600 },
-        { name: "吊帶褲", price: 800 },
-        { name: "防寒手套", price: 300 },
-        { name: "GORE-TEX 撥水加工", price: 500 },
-        { name: "雪衣 撥水加工", price: 600 },
-        { name: "雪褲 撥水加工", price: 600 },
-        { name: "連身衣 撥水加工", price: 1000 },
-        { name: "吊帶褲 撥水加工", price: 600 },
-        { name: "防寒手套 撥水加工", price: 200 }
+        { name: "機能型外套", price: 400 }, { name: "GORE-TEX 衣服", price: 400 }, { name: "GORE-TEX 褲子", price: 400 },
+        { name: "雪衣", price: 600 }, { name: "連身衣", price: 1000 }, { name: "雪褲", price: 600 },
+        { name: "吊帶褲", price: 800 }, { name: "防寒手套", price: 300 }, { name: "GORE-TEX 撥水加工", price: 500 },
+        { name: "雪衣 撥水加工", price: 600 }, { name: "雪褲 撥水加工", price: 600 }, { name: "連身衣 撥水加工", price: 1000 },
+        { name: "吊帶褲 撥水加工", price: 600 }, { name: "防寒手套 撥水加工", price: 200 }
       ],
       "裙褲類": [
-        { name: "西褲", price: 100 },
-        { name: "女長褲", price: 100 },
-        { name: "牛仔褲", price: 150 },
-        { name: "休閒褲", price: 120 },
-        { name: "運動褲", price: 100 },
-        { name: "短褲", price: 80 },
-        { name: "短裙", price: 80 },
-        { name: "褲裙", price: 100 },
-        { name: "長裙", price: 150 },
-        { name: "毛裙", price: 180 },
-        { name: "絲絨裙", price: 200 },
-        { name: "半褶裙", price: 150 },
-        { name: "百褶裙", price: 200 },
-        { name: "合成皮褲", price: 200 },
-        { name: "合成皮裙", price: 200 }
+        { name: "西褲", price: 100 }, { name: "女長褲", price: 100 }, { name: "牛仔褲", price: 150 },
+        { name: "休閒褲", price: 120 }, { name: "運動褲", price: 100 }, { name: "短褲", price: 80 },
+        { name: "短裙", price: 80 }, { name: "褲裙", price: 100 }, { name: "長裙", price: 150 },
+        { name: "毛裙", price: 180 }, { name: "絲絨裙", price: 200 }, { name: "半褶裙", price: 150 },
+        { name: "百褶裙", price: 200 }, { name: "合成皮褲", price: 200 }, { name: "合成皮裙", price: 200 }
       ],
       "禮服類": [
-        { name: "兒童禮服", price: 200 },
-        { name: "短禮服", price: 400 },
-        { name: "長禮服", price: 700 },
-        { name: "新娘禮服", price: 1500 }
+        { name: "兒童禮服", price: 200 }, { name: "短禮服", price: 400 },
+        { name: "長禮服", price: 700 }, { name: "新娘禮服", price: 1500 }
       ],
       "寢具用品類": [
-        { name: "枕頭套", price: 80 },
-        { name: "抱枕套", price: 80 },
-        { name: "抱枕", price: 120 },
-        { name: "枕頭芯", price: 400 },
-        { name: "床單薄", price: 160 },
-        { name: "床單厚", price: 200 },
-        { name: "被套薄", price: 160 },
-        { name: "被套厚", price: 200 },
-        { name: "保潔墊", price: 170 },
-        { name: "涼被", price: 400 },
-        { name: "棉被單人", price: 500 },
-        { name: "棉被雙人", price: 700 },
-        { name: "毛絨被", price: 400 },
-        { name: "毛毯", price: 500 },
-        { name: "羽絨被", price: 700 },
-        { name: "羊毛被", price: 700 },
-        { name: "蠶絲被", price: 700 },
-        { name: "睡袋", price: 500 },
+        { name: "枕頭套", price: 80 }, { name: "抱枕套", price: 80 }, { name: "抱枕", price: 120 },
+        { name: "枕頭芯", price: 400 }, { name: "床單薄", price: 160 }, { name: "床單厚", price: 200 },
+        { name: "被套薄", price: 160 }, { name: "被套厚", price: 200 }, { name: "保潔墊", price: 170 },
+        { name: "涼被", price: 400 }, { name: "棉被單人", price: 500 }, { name: "棉被雙人", price: 700 },
+        { name: "毛絨被", price: 400 }, { name: "毛毯", price: 500 }, { name: "羽絨被", price: 700 },
+        { name: "羊毛被", price: 700 }, { name: "蠶絲被", price: 700 }, { name: "睡袋", price: 500 },
         { name: "腳踏墊", price: 150 }
       ],
       "沙發用品類": [
-        { name: "單人沙發套", price: 150 },
-        { name: "雙人沙發套", price: 300 },
-        { name: "三人沙發套", price: 400 },
-        { name: "桌巾", price: 150 }
+        { name: "單人沙發套", price: 150 }, { name: "雙人沙發套", price: 300 },
+        { name: "三人沙發套", price: 400 }, { name: "桌巾", price: 150 }
       ],
       "玩偶類": [
-        { name: "毛絨玩偶長度30公分", price: 150 },
-        { name: "毛絨小型玩偶60公分", price: 250 },
-        { name: "毛絨中型玩偶90公分", price: 400 },
-        { name: "毛絨大型玩偶120公分", price: 500 }
+        { name: "毛絨玩偶長度30公分", price: 150 }, { name: "毛絨小型玩偶60公分", price: 250 },
+        { name: "毛絨中型玩偶90公分", price: 400 }, { name: "毛絨大型玩偶120公分", price: 500 }
       ],
       "小件類": [
-        { name: "領帶", price: 80 },
-        { name: "手套", price: 80 },
-        { name: "絲巾", price: 150 },
-        { name: "圍巾薄", price: 200 },
-        { name: "圍巾厚", price: 300 },
-        { name: "披肩", price: 300 },
-        { name: "棒球帽", price: 150 },
-        { name: "毛帽", price: 150 }
+        { name: "領帶", price: 80 }, { name: "手套", price: 80 }, { name: "絲巾", price: 150 },
+        { name: "圍巾薄", price: 200 }, { name: "圍巾厚", price: 300 }, { name: "披肩", price: 300 },
+        { name: "棒球帽", price: 150 }, { name: "毛帽", price: 150 }
       ],
       "其他類": [
-        { name: "窗簾120公分(摺)", price: 80 },
-        { name: "窗簾180公分(摺)", price: 100 },
-        { name: "窗簾210公分(摺)", price: 120 },
-        { name: "地毯", price: "估價" },
+        { name: "窗簾120公分(摺)", price: 80 }, { name: "窗簾180公分(摺)", price: 100 },
+        { name: "窗簾210公分(摺)", price: 120 }, { name: "地毯", price: "估價" },
         { name: "各式包包清洗", price: "估價" }
       ],
       "特殊處理": [
-        { name: "黃斑特殊處理", price: "估價" },
-        { name: "染色處理", price: "估價" }
+        { name: "黃斑特殊處理", price: "估價" }, { name: "染色處理", price: "估價" }
       ]
     };
 
@@ -496,19 +432,14 @@
     let currentCategory = "一般衣服類";
 
     window.onload = function() {
-      // 初始化 LIFF SDK
       liff.init({ liffId: MY_LIFF_ID })
-        .then(() => {
-          console.log("LIFF 初始化成功");
-        })
-        .catch((err) => {
-          console.error("LIFF 初始化失敗:", err);
-        });
+        .then(() => { console.log("LIFF 初始化成功"); })
+        .catch((err) => { console.error("LIFF 初始化失敗:", err); });
 
       renderTabs();
       renderItems(currentCategory);
 
-      // 設定預設預約日期為明天
+      // 設定預設日期為明天
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       const yyyy = tomorrow.getFullYear();
@@ -631,7 +562,6 @@
         const qty = selectedCart[itemName];
         itemsArray.push(`${itemName} x${qty}`);
 
-        // 計算小計金額
         for (let cat in laundryData) {
           const found = laundryData[cat].find(i => i.name === itemName);
           if (found && typeof found.price === "number") {
@@ -648,7 +578,7 @@
       const totalPriceVal = calculatedSubtotal + shippingFeeVal;
       const totalPriceText = `NT$${totalPriceVal}`;
 
-      // 確實對應 A ~ K 欄位的 JSON 結構發送給 Google Apps Script
+      // 精確對應 A~K 欄傳遞
       if (scriptURL) {
         fetch(scriptURL, {
           method: "POST",
@@ -670,10 +600,8 @@
         });
       }
 
-      // 組合 LINE 訊息內容
       const lineMessage = `------------------\n👤 姓名：${name}\n📞 電話：${phone}\n📍 地址：${address}\n📅 時間：${date} ${time}\n👕 品項：${itemsText}\n💵 預估金額：${totalPriceText}\n📝 備註：${note || '無'}\n------------------\n已送出預約，請店家確認收件時間！`;
 
-      // 利用 LIFF 在 LINE 聊天室自動代發訊息
       if (liff.isInClient()) {
         liff.sendMessages([
           {
