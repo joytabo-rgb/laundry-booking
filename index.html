@@ -589,12 +589,15 @@
 
     alert("預約資料已自動複製！按「確定」將直接開啟明明洗衣官方帳號，貼上訊息傳送即可完成預約！");
 
-    // 4. 開啟官方帳號聊天室 (百分之百成功跳轉，不跳錯誤彈窗)
+    // 4. 開啟官方帳號聊天室
     let formattedLineID = lineID.trim();
-    if (!formattedLineID.startsWith('@')) {
-      formattedLineID = '@' + formattedLineID;
+    // 移除開頭可能重複的 @
+    if (formattedLineID.startsWith('@')) {
+      formattedLineID = formattedLineID.substring(1);
     }
-    window.location.href = `https://line.me/R/ti/p/${formattedLineID}`;
+    
+    // 使用 LINE 官方推薦的 %40 編碼連結，避免部分手機瀏覽器阻擋
+    window.location.href = `https://line.me/R/ti/p/%40${formattedLineID}`;
   }
 </script>
 
