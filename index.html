@@ -346,14 +346,13 @@
   </div>
 
 <script>
-  // ⚠️ 1. 請填入您的 Google Apps Script 部署網址（如果不使用試算表可保持原樣）
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbyhDGimwB27yrCkAwKoACf_VWEbtBS-dezq9kZMtWa0RGUCbdC5Toc2Z7EgzsOMbGdaCQ/exec';
+  // ⚠️ 1. 請填入您的 Google Apps Script 部署網址（用於將預約資料寫入 Google 試算表）
+  const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
 
-  // ⚠️ 2. 請填入明明洗衣官方帳號的 LINE ID（請注意：不要加 @ 符號！）
-  // 例如官方帳號是 @123abcd，請填寫 '123abcd'
-  const lineID = '854mkark';
+  // ⚠️ 2. 請填入明明洗衣官方帳號的 ID（例：@123abcd）
+  const lineID = '@YOUR_LINE_ID';
 
-  // 明明專業洗衣 10 大分類完整價目表
+  // 明明專業洗衣 10 大分類價目表
   const priceData = {
     "一般衣服類": [
       { name: "西裝", price: 150 }, { name: "襯衫", price: 60 }, { name: "T SHIRT", price: 80 },
@@ -418,13 +417,11 @@
   let cart = {};
   let currentCategory = "一般衣服類";
 
-  // DOM 載入完畢後執行渲染
   document.addEventListener("DOMContentLoaded", function() {
     renderCategories();
     renderItemList(currentCategory);
   });
 
-  // 渲染分類按鈕
   function renderCategories() {
     const categoryContainer = document.getElementById("categoryContainer");
     if (!categoryContainer) return;
@@ -444,7 +441,6 @@
     });
   }
 
-  // 渲染商品清單
   function renderItemList(category) {
     const container = document.getElementById("itemListContainer");
     if (!container) return;
@@ -473,7 +469,6 @@
     });
   }
 
-  // 增減品項數量
   function changeQty(itemName, amount) {
     const currentQty = cart[itemName] || 0;
     const newQty = currentQty + amount;
@@ -488,7 +483,6 @@
     calculateTotal();
   }
 
-  // 計算總價
   function calculateTotal() {
     let subtotal = 0;
     let hasQuote = false;
@@ -522,7 +516,6 @@
       : "未滿 NT$400 運費 NT$100";
   }
 
-  // 送出預約
   function submitOrder() {
     const name = document.getElementById("custName").value.trim();
     const phone = document.getElementById("custPhone").value.trim();
@@ -548,8 +541,8 @@
     const itemsText = itemsArray.join("、");
     const totalText = document.getElementById("displayTotal").innerText;
 
-    // 發送背景請求至試算表 (Google Apps Script)
-    if (scriptURL && scriptURL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+    // 1. 背景提交預約資料至後台試算表
+    if (scriptURL && scriptURL !== 'https://script.google.com/macros/s/AKfycbyhDGimwB27yrCkAwKoACf_VWEbtBS-dezq9kZMtWa0RGUCbdC5Toc2Z7EgzsOMbGdaCQ/exec') {
       const payload = {
         name: name,
         phone: phone,
@@ -570,7 +563,7 @@
       });
     }
 
-    // 組合 LINE 預約文字訊息
+    // 2. 組合要發送給官方帳號的預約文字
     const lineMessage = `👋 您好，我已完成線上送洗預約！
 ------------------
 👤 姓名：${name}
@@ -582,17 +575,26 @@
 💰 預估金額：${totalText}
 💬 備註：${note || '無'}`;
 
-    // 清理 ID 中的 @ 符號（避免輸入錯誤）
-    const cleanLineID = lineID.replace('@', '').trim();
-
-    if (cleanLineID && cleanLineID !== 'YOUR_LINE_ID') {
-      alert("預約已送出！按下「確定」將直接為您開啟官方帳號。");
-      // 直連官方帳號並帶入訊息
-      window.location.href = `https://line.me/R/oaMessage/${cleanLineID}/?${encodeURIComponent(lineMessage)}`;
+    // 3. 複製訊息並引導開啟官方帳號
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(lineMessage);
     } else {
-      alert("提示：尚未設定 LINE 官方帳號 ID，系統將改用通用分享模式。");
-      window.location.href = `https://line.me/R/share?text=${encodeURIComponent(lineMessage)}`;
+      const textArea = document.createElement("textarea");
+      textArea.value = lineMessage;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
     }
+
+    alert("預約資料已自動複製！按「確定」將直接開啟明明洗衣官方帳號，貼上訊息傳送即可完成預約！");
+
+    // 4. 開啟官方帳號聊天室 (百分之百成功跳轉，不跳錯誤彈窗)
+    let formattedLineID = lineID.trim();
+    if (!formattedLineID.startsWith('@')) {
+      formattedLineID = '@' + formattedLineID;
+    }
+    window.location.href = `https://line.me/R/ti/p/${formattedLineID}`;
   }
 </script>
 
