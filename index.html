@@ -524,8 +524,7 @@
       ? "滿 NT$400 免運費" 
       : "未滿 NT$400 運費 NT$100";
   }
-
-  // 送出預約單（發送 GAS 資料至 Google 試算表及 LINE）
+// 送出預約單（發送 GAS 資料至 Google 試算表及自動跳轉 LINE）
   function submitOrder() {
     const name = document.getElementById("custName").value.trim();
     const phone = document.getElementById("custPhone").value.trim();
@@ -544,25 +543,27 @@
       return;
     }
 
-    // 格式化購物車資料
+    // 1. 整理購物車清單字串
     let itemsArray = [];
     for (let itemName in cart) {
       itemsArray.push(`${itemName} x${cart[itemName]}`);
     }
+    const itemsText = itemsArray.join("、");
+    const totalText = document.getElementById("displayTotal").innerText;
 
+    // 2. 打包發送至 Google Apps Script 試算表
     const payload = {
       name: name,
       phone: phone,
       address: address,
       pickupDate: date,
       pickupTime: time,
-      items: itemsArray.join(", "),
-      totalPrice: document.getElementById("displayTotal").innerText,
+      items: itemsText,
+      totalPrice: totalText,
       note: note,
       timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
     };
 
-    // 背景發送 POST 給 Google Apps Script 寫入試算表及 LINE 通知
     if (scriptURL && scriptURL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
       fetch(scriptURL, {
         method: "POST",
@@ -572,9 +573,26 @@
       });
     }
 
-    alert("預約已送出！即將為您開啓 LINE 聯絡確認。");
-  }
-</script>
+    // 3. 組合 LINE 預約訊息文字
+    const lineMessage = `👋 您好，我已完成線上送洗預約！
+------------------
+👤 姓名：${name}
+📞 電話：${phone}
+🏠 地址：${address}
+📅 取件日期：${date}
+⏰ 取件時段：${time}
+🧺 送洗品項：${itemsText}
+💰 預估金額：${totalText}
+💬 備註：${note || '無'}`;
 
-</body>
-</html>
+    // ⚠️ 請替換為您的 LINE 官方帳號 ID（例如 @swiss_laundry）或個人 LINE ID
+    const lineID = "@854mkark"; 
+
+    // 4. 彈出提示並自動開啟 LINE App 帶入訊息
+    alert("預約已送出！按「確定」將為您開啟 LINE 傳送預約細節。");
+
+    // 自動跳轉至 LINE
+    const lineUrl = `https://line.me/R/oaMessage/${lineID}/?${encodeURIComponent(lineMessage)}`;
+    window.location.href = lineUrl;
+  }
+  
