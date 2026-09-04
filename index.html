@@ -6,7 +6,7 @@
   <title>明明專業洗衣 - 線上預約收送系統</title>
   <style>
     :root {
-      --primary-color: #0056b3;
+      --primary-color: #0d6efd;
       --secondary-color: #f4f6f9;
       --line-green: #06C755;
       --border-color: #e0e0e0;
@@ -26,19 +26,36 @@
       padding-bottom: 110px;
     }
 
+    /* 藍色大表頭區塊 */
     header {
-      background-color: #ffffff;
-      padding: 16px;
+      background-color: #0b5ed7;
+      color: #ffffff;
+      padding: 24px 16px;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 0;
-      z-index: 10;
     }
 
     header h1 {
-      font-size: 1.25rem;
-      color: var(--primary-color);
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      letter-spacing: 0.5px;
+    }
+
+    /* 滿額免運提示區塊 */
+    .shipping-banner {
+      background-color: #fef3d6;
+      color: #664d03;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-bottom: 1px solid #ffe69c;
     }
 
     .container {
@@ -60,6 +77,9 @@
       font-weight: bold;
       margin-bottom: 12px;
       color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .form-group {
@@ -276,15 +296,21 @@
 </head>
 <body>
 
-  <!-- 頂部標題區 -->
+  <!-- 頂部藍色大表頭 -->
   <header>
-    <h1>明明專業洗衣 - 線上預約收送系統</h1>
+    <h1>明明專業洗衣</h1>
+    <p>專業．舒適．放心的到府收送線上預約服務</p>
   </header>
+
+  <!-- 免運提示欄 -->
+  <div class="shipping-banner">
+    🚚 滿 NT$400 免運費，未滿酌收 NT$100
+  </div>
 
   <div class="container">
     <!-- 1. 客戶與收送資訊 -->
     <div class="section-card">
-      <div class="section-title">1. 客戶與收送資訊</div>
+      <div class="section-title">👤 1. 收送資訊</div>
       
       <div class="form-group">
         <label for="custName">姓名 <span>*</span></label>
@@ -324,7 +350,7 @@
 
     <!-- 2. 選擇送洗品項 -->
     <div class="section-card">
-      <div class="section-title">2. 選擇送洗品項</div>
+      <div class="section-title">🧺 2. 選擇送洗品項</div>
       
       <!-- 動態分類頁籤 -->
       <div class="tabs-wrapper" id="categoryTabs"></div>
@@ -353,7 +379,7 @@
 
   <script>
     const lineID = "@854mkark";
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwq-1O9uTylI4I5e5qWkIsM7IvgQfO49tXqU45e3r6t11Rj8W9z_Jz8v-K3R/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzAkz91FW9DmyG1HzkmthUKTfVOn625uB3Ublukpro0Whs1WKCaZwdcWczPFhdqmVOyjQ/exec";
 
     // 依據價目表整理的完整品項資料
     const laundryData = {
@@ -618,7 +644,7 @@
       const totalText = document.getElementById("displayTotal").innerText;
 
       // 背景發送給 Google 試算表
-      if (scriptURL && scriptURL !== 'https://script.google.com/macros/s/AKfycbyhDGimwB27yrCkAwKoACf_VWEbtBS-dezq9kZMtWa0RGUCbdC5Toc2Z7EgzsOMbGdaCQ/exec') {
+      if (scriptURL && scriptURL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
         const payload = {
           name: name,
           phone: phone,
@@ -639,7 +665,7 @@
         });
       }
 
-      // 組合 LINE 訊息內容（同步調整為預約收件）
+      // 組合 LINE 訊息內容
       const lineMessage = `👋 您好，我已完成線上送洗預約！
 ------------------
 👤 姓名：${name}
