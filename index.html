@@ -42,11 +42,12 @@
     
     .category-tabs:active { cursor: grabbing; }
 
-    /* 自訂清晰滾動條 */
+    /* 清晰藍色橫向滾動條 */
     .category-tabs::-webkit-scrollbar { height: 6px; }
-    .category-tabs::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+    .category-tabs::-webkit-scrollbar-track { background: #e8f0fe; border-radius: 10px; }
     .category-tabs::-webkit-scrollbar-thumb { background: #0b57d0; border-radius: 10px; }
 
+    /* 分類頁籤按鈕樣式 */
     .tab-btn { 
       background: #f0f4f9; 
       border: none; 
@@ -90,7 +91,7 @@
   </div>
 
   <div class="content-body">
-    <div class="free-shipping-tag">🚚 消費滿 NT$ 400 免收運費（未達門檻另收 NT$ 100 運費）</div>
+    <div class="free-shipping-tag">消費滿 NT$ 400 免收運費（未達門檻另收 NT$ 100 運費）</div>
 
     <form id="bookingForm" onsubmit="submitForm(event)">
       
@@ -112,7 +113,7 @@
       <hr style="border:none; border-top:1px solid #eee; margin:25px 0;">
 
       <!-- 區塊 2 -->
-      <div class="section-title">📦 2. 選擇送洗品項</div>
+      <div class="section-title">2. 選擇送洗品項</div>
 
       <div class="category-scroll-wrapper">
         <div class="category-tabs" id="tabsContainer"></div>
@@ -158,7 +159,7 @@
   // 1. 請替換為您從 Google Apps Script 部署獲得的網址
   var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQaoEAxBnyzo1wVW7Wgv0yG9_hhyqgT9WB5QxDLoRNgpWKx4mwPOMAbShhLqjKBH7TjQ/exec"; 
   
-  // 2. 您的 LINE 官方帳號 ID（已為您填入照片中的 @654mkark）
+  // 2. 您的 LINE 官方帳號 ID
   var LINE_ID = "@654mkark"; 
 
   var categories = [
@@ -488,13 +489,13 @@
       body: JSON.stringify(formData)
     })
     .then(function() {
-      // 這裡即為您圖片中的訊息組裝與 LINE 跳轉邏輯
+      // 組合 LINE 訊息內容（完整帶回原版的 Emoji 圖案）
       var lineMsg = "【明明專業洗衣 - 線上預約】\n" +
         "------------------------------\n" +
         "👤 姓名：" + formData.name + "\n" +
         "📞 電話：" + formData.phone + "\n" +
         "📍 地址：" + formData.address + "\n" +
-        "🗓 時間：" + formData.pickupDate + " " + formData.pickupTime + "\n" +
+        "📅 時間：" + formData.pickupDate + " " + formData.pickupTime + "\n" +
         "👕 送洗品項：\n" + selectedList.join("\n") + "\n\n" +
         "💰 費用試算：\n" +
         "• 小計：" + formData.subtotal + "\n" +
@@ -506,7 +507,7 @@
 
       var lineUrl = "https://line.me/R/oaMessage/" + LINE_ID + "/?" + encodeURIComponent(lineMsg);
 
-      alert("預約成功！資料已寫入系統，點擊確定將跳轉至 LINE 送出對話訊息。");
+      alert("預約成功！資料已成功同步寫入試算表。按下「確定」跳轉至 LINE 送出對話訊息。");
       window.location.href = lineUrl;
     })
     .catch(function(err) {
