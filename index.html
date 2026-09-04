@@ -5,21 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>明明專業洗衣 - 線上預約</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; padding: 15px; margin: 0; color: #333; }
-    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-    .header { text-align: center; margin-bottom: 15px; }
-    .header h2 { color: #0b57d0; margin: 0 0 5px; font-size: 1.6rem; }
-    .header p { color: #666; margin: 0; font-size: 0.9rem; }
-    .free-shipping-tag { background: #e8f0fe; color: #0b57d0; text-align: center; padding: 8px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px; }
-
-    .section-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; padding: 20px 15px; margin: 0; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow: hidden; }
     
-    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
-    .category-tabs::-webkit-scrollbar { display: none; }
-    .tab-btn { background: #f0f4f9; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; color: #444; font-weight: 500; white-space: nowrap; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+    /* 1. 藍色滿版 Header 樣式 (符合附件圖片樣式) */
+    .header-banner { background: #0b57d0; color: white; text-align: center; padding: 25px 20px 20px; }
+    .header-banner h1 { margin: 0 0 8px; font-size: 1.8rem; font-weight: bold; letter-spacing: 1px; }
+    .header-banner p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
+    
+    .content-body { padding: 20px 25px 25px; }
+    
+    .free-shipping-tag { background: #e8f0fe; color: #0b57d0; text-align: center; padding: 10px; border-radius: 8px; font-size: 0.88rem; font-weight: bold; margin-bottom: 25px; }
+
+    .section-title { font-size: 1.1rem; font-weight: bold; margin: 20px 0 12px; color: #0b57d0; display: flex; align-items: center; gap: 6px; }
+    .section-title:first-of-type { margin-top: 0; }
+    
+    /* 表單元件樣式 */
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 0.9rem; color: #444; }
+    input, select, textarea { width: 100%; padding: 11px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; }
+    
+    /* 分類分頁 (Tab) 橫向滾動修正 */
+    .category-tabs { 
+      display: flex; 
+      gap: 8px; 
+      overflow-x: auto; 
+      white-space: nowrap; 
+      padding-bottom: 8px; 
+      margin-bottom: 15px; 
+      -webkit-overflow-scrolling: touch; 
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .category-tabs::-webkit-scrollbar { height: 4px; }
+    .category-tabs::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+    .tab-btn { 
+      background: #f0f4f9; 
+      border: none; 
+      padding: 8px 16px; 
+      border-radius: 20px; 
+      font-size: 0.9rem; 
+      color: #444; 
+      font-weight: 500; 
+      white-space: nowrap; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+      flex-shrink: 0; 
+      display: inline-block;
+    }
     .tab-btn.active { background: #0b57d0; color: white; font-weight: bold; }
 
-    .item-list { min-height: 250px; max-height: 380px; overflow-y: auto; padding-right: 5px; }
+    .item-list { min-height: 220px; max-height: 350px; overflow-y: auto; padding-right: 5px; }
     .item-card { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
     .item-info .title { font-weight: 600; font-size: 0.98rem; color: #222; }
     .item-info .price { color: #666; font-size: 0.85rem; margin-top: 3px; }
@@ -29,15 +66,11 @@
     .btn-qty:active { background: #0b57d0; color: white; }
     .qty-val { font-weight: bold; font-size: 1.05rem; min-width: 20px; text-align: center; }
 
-    /* 總計金額計算卡片 */
-    .summary-card { background: #f8f9fa; border-radius: 10px; padding: 15px; margin: 15px 0; border: 1px solid #e9ecef; }
+    /* 金額計算試算區 */
+    .summary-card { background: #f8f9fa; border-radius: 10px; padding: 15px; margin: 15px 0 20px; border: 1px solid #e9ecef; }
     .summary-line { display: flex; justify-content: space-between; font-size: 0.9rem; color: #555; margin-bottom: 6px; }
     .summary-line.total { font-size: 1.1rem; font-weight: bold; color: #0b57d0; margin-top: 8px; border-top: 1px dashed #ccc; padding-top: 8px; }
 
-    .form-group { margin-bottom: 15px; }
-    label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 0.9rem; color: #444; }
-    input, select, textarea { width: 100%; padding: 11px; border: 1px solid #dcdfe6; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; }
-    
     .btn-submit { width: 100%; background: #0b57d0; color: white; padding: 15px; font-size: 1.1rem; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
   </style>
@@ -45,61 +78,71 @@
 <body>
 
 <div class="container">
-  <div class="header">
-    <h2>明明專業洗衣</h2>
+  <div class="header-banner">
+    <h1>明明專業洗衣</h1>
     <p>線上預約專車收送服務</p>
   </div>
-  <div class="free-shipping-tag">🚚 消費滿 NT$ 400 免收運費（未達門檻另收 NT$ 100 運費）</div>
 
-  <form id="bookingForm" onsubmit="submitForm(event)">
-    <div class="section-title">🧺 1. 選擇送洗品項</div>
+  <div class="content-body">
+    <div class="free-shipping-tag">🚚 消費滿 NT$ 400 免收運費（未達門檻另收 NT$ 100 運費）</div>
 
-    <div class="category-tabs" id="tabsContainer"></div>
-    <div class="item-list" id="itemListContainer"></div>
+    <form id="bookingForm" onsubmit="submitForm(event)">
+      
+      <div class="section-title">1. 客戶聯絡資訊</div>
+      <div class="form-group">
+        <label>姓名 *</label>
+        <input type="text" id="name" required placeholder="請輸入姓名">
+      </div>
+      <div class="form-group">
+        <label>電話 *</label>
+        <input type="tel" id="phone" required placeholder="例：0912345678">
+      </div>
+      <div class="form-group">
+        <label>收送地址 *</label>
+        <input type="text" id="address" required placeholder="請輸入完整門牌地址">
+      </div>
 
-    <div class="summary-card">
-      <div class="summary-line"><span>洗滌費用小計：</span><span id="txtSubtotal">NT$ 0</span></div>
-      <div class="summary-line"><span>運費：</span><span id="txtShipping">NT$ 0</span></div>
-      <div class="summary-line total"><span>預估總金額：</span><span id="txtTotal">NT$ 0</span></div>
-    </div>
+      <hr style="border:none; border-top:1px solid #eee; margin:25px 0;">
 
-    <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
+      <div class="section-title">🧺 選擇送洗品項</div>
 
-    <div class="section-title">📍 2. 客戶與收送資訊</div>
-    <div class="form-group">
-      <label>姓名 *</label>
-      <input type="text" id="name" required placeholder="請輸入姓名">
-    </div>
-    <div class="form-group">
-      <label>電話 *</label>
-      <input type="tel" id="phone" required placeholder="例如：0912345678">
-    </div>
-    <div class="form-group">
-      <label>收送地址 *</label>
-      <input type="text" id="address" required placeholder="請輸入完整門牌地址">
-    </div>
-    <div class="form-group">
-      <label>預約收送時間 *</label>
-      <div style="display:flex; gap:10px;">
-        <input type="date" id="pickupDate" required style="flex:1;">
-        <select id="pickupTime" required style="flex:1;">
+      <div class="category-tabs" id="tabsContainer"></div>
+      <div class="item-list" id="itemListContainer"></div>
+
+      <div class="summary-card">
+        <div class="summary-line"><span>洗滌費用小計：</span><span id="txtSubtotal">NT$ 0</span></div>
+        <div class="summary-line"><span>運費：</span><span id="txtShipping">NT$ 0</span></div>
+        <div class="summary-line total"><span>預估總金額：</span><span id="txtTotal">NT$ 0</span></div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid #eee; margin:25px 0;">
+
+      <div class="section-title">3. 預約收送時間與備註</div>
+      <div class="form-group">
+        <label>希望收件日期 *</label>
+        <input type="date" id="pickupDate" required>
+      </div>
+      <div class="form-group">
+        <label>希望收件時段 *</label>
+        <select id="pickupTime" required>
           <option value="">請選擇時段</option>
-          <option value="上午 (09:00 - 12:00)">上午 (09:00-12:00)</option>
-          <option value="下午 (14:00 - 17:00)">下午 (14:00-17:00)</option>
-          <option value="晚上 (18:00 - 21:00)">晚上 (18:00-21:00)</option>
+          <option value="上午 (09:00 - 12:00)">上午 (09:00 - 12:00)</option>
+          <option value="下午 (14:00 - 17:00)">下午 (14:00 - 17:00)</option>
+          <option value="晚上 (18:00 - 21:00)">晚上 (18:00 - 21:00)</option>
         </select>
       </div>
-    </div>
-    <div class="form-group">
-      <label>備註需求（選填）</label>
-      <textarea id="note" rows="2" placeholder="例如：放置管理室、特殊污漬說明..."></textarea>
-    </div>
+      <div class="form-group">
+        <label>備註需求（選填）</label>
+        <textarea id="note" rows="2" placeholder="例如：放置管理室、特殊污漬說明..."></textarea>
+      </div>
 
-    <button type="submit" id="submitBtn" class="btn-submit">送出預約並開啟 LINE</button>
-  </form>
+      <button type="submit" id="submitBtn" class="btn-submit">送出預約並開啟 LINE</button>
+    </form>
+  </div>
 </div>
 
 <script>
+  // 11 大類別完整品項
   var categories = [
     {
       name: "一般衣服類",
@@ -320,7 +363,6 @@
     calculateSummary();
   }
 
-  // 計算金額、運費與總計
   function calculateSummary() {
     var subtotal = 0;
     var hasEstimate = false;
@@ -346,7 +388,7 @@
     var total = subtotal + shipping;
 
     document.getElementById("txtSubtotal").innerText = "NT$ " + subtotal + (hasEstimate ? " (含估價項目)" : "");
-    document.getElementById("txtShipping").innerText = subtotal === 0 ? "NT$ 0" : (shipping === 0 ? "NT$ 0 (已達免運門檻)" : "NT$ " + shipping);
+    document.getElementById("txtShipping").innerText = subtotal === 0 ? "NT$ 0" : (shipping === 0 ? "NT$ 0 (免運)" : "NT$ " + shipping);
     document.getElementById("txtTotal").innerText = "NT$ " + total + (hasEstimate ? " + 另計估價" : "");
 
     return { subtotal: subtotal, shipping: shipping, total: total, hasEstimate: hasEstimate };
@@ -373,7 +415,6 @@
 
     var itemsText = selectedList.length > 0 ? selectedList.join(", ") : "未點選（現場點交）";
 
-    // 打包送往 Google 試算表 (完全對應 A~K 欄)
     var formData = {
       name: document.getElementById("name").value,
       phone: document.getElementById("phone").value,
@@ -387,7 +428,6 @@
       note: document.getElementById("note").value || "無"
     };
 
-    // 填入 Apps Script 部署 URL
     var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9ObXPi7RAs_aJksENKEC89v6f2SyhMEdkoD7nAN4oCqUVQI9k5GUHINFaRO8u-ngB6w/exec";
 
     fetch(GOOGLE_SCRIPT_URL, {
@@ -396,7 +436,6 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
     }).then(function() {
-      // 組合 LINE 訊息內容
       var lineMsg = "【明明專業洗衣 - 線上預約】\n" +
         "-------------------------\n" +
         "👤 姓名：" + formData.name + "\n" +
@@ -412,10 +451,10 @@
         "-------------------------\n" +
         "預約已送出，請等待店家專人確認！";
 
-      var LINE_ID = "@854mkark"; // 填入貴店的 LINE ID
+      var LINE_ID = "@854mkark"; 
       var lineUrl = "https://line.me/R/oaMessage/" + LINE_ID + "/?" + encodeURIComponent(lineMsg);
 
-      alert("預約成功！資料已成功同步寫入試算表。按下「確定」跳轉至 LINE 發送預約訊息。");
+      alert("預約成功！資料已寫入系統，點擊確定將跳轉至 LINE 送出對話訊息。");
       window.location.href = lineUrl;
     }).catch(function(err) {
       alert("傳送失敗，請稍後再試。");
